@@ -1,0 +1,356 @@
+
+*** Running vivado
+    with args -log TimeCardTop.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source TimeCardTop.tcl
+
+
+****** Vivado v2019.1 (64-bit)
+  **** SW Build 2552052 on Fri May 24 14:49:42 MDT 2019
+  **** IP Build 2548770 on Fri May 24 18:01:18 MDT 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source TimeCardTop.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+WARNING: [IP_Flow 19-2248] Failed to load user IP repository 'c:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Implementation/Xilinx/TimeCard_Production/Time-Card/FPGA/Open-Source'; Can't find the specified path.
+If this directory should no longer be in your list of user repositories, go to the IP Settings dialog and remove it.
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'c:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Ips'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'C:/Xilinx/Vivado/2019.1/data/ip'.
+WARNING: [IP_Flow 19-4995] The host OS only allows 260 characters in a normal path. The IP cache path is more than 80 characters. If you experience issues with IP caching, please consider changing the IP cache to a location with a shorter path. Alternately consider using the OS subst command to map part of the path to a drive letter. 
+Current IP cache path is c:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Implementation/Xilinx/TimeCard_Production/TimeCard/TimeCard.cache/ip 
+Command: synth_design -top TimeCardTop -part xc7a100tfgg484-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a100t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a100t'
+INFO: [Device 21-403] Loading part xc7a100tfgg484-1
+INFO: Launching helper process for spawning children vivado processes
+INFO: Helper process launched with PID 15220 
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 728.445 ; gain = 178.645
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'TimeCardTop' [C:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Implementation/Xilinx/TimeCard_Production/Top/TimeCardTop.vhd:233]
+	Parameter GoldenImage_Gen bound to: 0 - type: bool 
+INFO: [Synth 8-3491] module 'IBUFDS' declared at 'C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:32871' bound to instance 'MacPpsIn_Inst' of component 'Ibufds' [C:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Implementation/Xilinx/TimeCard_Production/Top/TimeCardTop.vhd:601]
+INFO: [Synth 8-6157] synthesizing module 'IBUFDS' [C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:32871]
+	Parameter CAPACITANCE bound to: DONT_CARE - type: string 
+	Parameter DIFF_TERM bound to: FALSE - type: string 
+	Parameter DQS_BIAS bound to: FALSE - type: string 
+	Parameter IBUF_DELAY_VALUE bound to: 0 - type: string 
+	Parameter IBUF_LOW_PWR bound to: TRUE - type: string 
+	Parameter IFD_DELAY_VALUE bound to: AUTO - type: string 
+	Parameter IOSTANDARD bound to: DEFAULT - type: string 
+INFO: [Synth 8-6155] done synthesizing module 'IBUFDS' (1#1) [C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:32871]
+INFO: [Synth 8-3491] module 'OBUFDS' declared at 'C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:46012' bound to instance 'MacPps0_Inst' of component 'Obufds' [C:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Implementation/Xilinx/TimeCard_Production/Top/TimeCardTop.vhd:608]
+INFO: [Synth 8-6157] synthesizing module 'OBUFDS' [C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:46012]
+	Parameter CAPACITANCE bound to: DONT_CARE - type: string 
+	Parameter IOSTANDARD bound to: DEFAULT - type: string 
+	Parameter SLEW bound to: SLOW - type: string 
+INFO: [Synth 8-6155] done synthesizing module 'OBUFDS' (2#1) [C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:46012]
+INFO: [Synth 8-3491] module 'OBUFDS' declared at 'C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:46012' bound to instance 'MacPps1_Inst' of component 'Obufds' [C:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Implementation/Xilinx/TimeCard_Production/Top/TimeCardTop.vhd:615]
+INFO: [Synth 8-3491] module 'BUFR' declared at 'C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:1402' bound to instance 'BufrClk0_Inst' of component 'Bufr' [C:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Implementation/Xilinx/TimeCard_Production/Top/TimeCardTop.vhd:632]
+INFO: [Synth 8-6157] synthesizing module 'BUFR' [C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:1402]
+	Parameter BUFR_DIVIDE bound to: BYPASS - type: string 
+	Parameter SIM_DEVICE bound to: 7SERIES - type: string 
+INFO: [Synth 8-6155] done synthesizing module 'BUFR' (3#1) [C:/Xilinx/Vivado/2019.1/scripts/rt/data/unisim_comp.v:1402]
+INFO: [Synth 8-637] synthesizing blackbox instance 'Bd_Inst' of component 'TimeCard_wrapper' [C:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Implementation/Xilinx/TimeCard_Production/Top/TimeCardTop.vhd:640]
+INFO: [Synth 8-256] done synthesizing module 'TimeCardTop' (4#1) [C:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Implementation/Xilinx/TimeCard_Production/Top/TimeCardTop.vhd:233]
+WARNING: [Synth 8-3917] design TimeCardTop has port Uart1TxDat_DatOut driven by constant 0
+WARNING: [Synth 8-3917] design TimeCardTop has port MacFreqControl_DatOut driven by constant 0
+WARNING: [Synth 8-3917] design TimeCardTop has port MacUsbPower_EnOut driven by constant 0
+WARNING: [Synth 8-3917] design TimeCardTop has port MacUsbP_DatOut driven by constant 0
+WARNING: [Synth 8-3917] design TimeCardTop has port MacUsbN_DatOut driven by constant 0
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port I2cScl_ClkInOut
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port I2cSda_DatInOut
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port Mhz10Clk1_ClkIn
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port Mhz125ClkP_ClkIn
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port Mhz125ClkN_ClkIn
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port Uart1RxDat_DatIn
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port Gnss1Tp_DatIn[1]
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port MacUsbOcN_DatIn
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 797.695 ; gain = 247.895
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 801.047 ; gain = 251.246
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 801.047 ; gain = 251.246
+---------------------------------------------------------------------------------
+INFO: [Netlist 29-17] Analyzing 4 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 910.324 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 2 instances were transformed.
+  OBUFDS => OBUFDS_DUAL_BUF (INV, OBUFDS, OBUFDS): 2 instances
+
+WARNING: [Constraints 18-5210] No constraints selected for write.
+Resolution: This message can indicate that there are no constraints for the design, or it can indicate that the used_in flags are set such that the constraints are ignored. This later case is used when running synth_design to not write synthesis constraints to the resulting checkpoint. Instead, project constraints are read when the synthesized design is opened.
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.036 . Memory (MB): peak = 910.324 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a100tfgg484-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:08 ; elapsed = 00:00:08 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     28 Bit       Adders := 2     
++---Registers : 
+	               31 Bit    Registers := 2     
+	                1 Bit    Registers := 4     
++---Muxes : 
+	   2 Input     28 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 2     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module TimeCardTop 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input     28 Bit       Adders := 2     
++---Registers : 
+	               31 Bit    Registers := 2     
+	                1 Bit    Registers := 4     
++---Muxes : 
+	   2 Input     28 Bit        Muxes := 2     
+	   2 Input      1 Bit        Muxes := 2     
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 240 (col length:80)
+BRAMs: 270 (col length: RAMB18 80 RAMB36 40)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+Warning: Parallel synthesis criteria is not met 
+WARNING: [Synth 8-3917] design TimeCardTop has port Uart1TxDat_DatOut driven by constant 0
+WARNING: [Synth 8-3917] design TimeCardTop has port MacFreqControl_DatOut driven by constant 0
+WARNING: [Synth 8-3917] design TimeCardTop has port MacUsbPower_EnOut driven by constant 0
+WARNING: [Synth 8-3917] design TimeCardTop has port MacUsbP_DatOut driven by constant 0
+WARNING: [Synth 8-3917] design TimeCardTop has port MacUsbN_DatOut driven by constant 0
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port I2cScl_ClkInOut
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port I2cSda_DatInOut
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port Mhz10Clk1_ClkIn
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port Mhz125ClkP_ClkIn
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port Mhz125ClkN_ClkIn
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port Uart1RxDat_DatIn
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port Gnss1Tp_DatIn[1]
+WARNING: [Synth 8-3331] design TimeCardTop has unconnected port MacUsbOcN_DatIn
+INFO: [Synth 8-3886] merging instance 'BlinkingLedCount_CntReg_reg[28]' (FDC) to 'BlinkingLedCount_CntReg_reg[30]'
+INFO: [Synth 8-3886] merging instance 'BlinkingLedCount_CntReg_reg[29]' (FDC) to 'BlinkingLedCount_CntReg_reg[30]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\BlinkingLedCount_CntReg_reg[30] )
+INFO: [Synth 8-3886] merging instance 'BlinkingLed2Count_CntReg_reg[28]' (FDC) to 'BlinkingLed2Count_CntReg_reg[30]'
+INFO: [Synth 8-3886] merging instance 'BlinkingLed2Count_CntReg_reg[29]' (FDC) to 'BlinkingLed2Count_CntReg_reg[30]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\BlinkingLed2Count_CntReg_reg[30] )
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:09 ; elapsed = 00:00:10 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:15 ; elapsed = 00:00:16 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++------+-----------------+----------+
+|      |BlackBox name    |Instances |
++------+-----------------+----------+
+|1     |TimeCard_wrapper |         1|
++------+-----------------+----------+
+
+Report Cell Usage: 
++------+------------------------+------+
+|      |Cell                    |Count |
++------+------------------------+------+
+|1     |TimeCard_wrapper_bbox_0 |     1|
+|2     |BUFR                    |     1|
+|3     |CARRY4                  |    22|
+|4     |LUT1                    |    43|
+|5     |LUT2                    |    30|
+|6     |LUT3                    |     3|
+|7     |LUT4                    |     5|
+|8     |LUT5                    |     6|
+|9     |LUT6                    |    40|
+|10    |FDCE                    |    85|
+|11    |FDPE                    |     2|
+|12    |IBUF                    |    26|
+|13    |IBUFDS                  |     1|
+|14    |OBUF                    |    51|
+|15    |OBUFDS                  |     2|
+|16    |OBUFT                   |     1|
++------+------------------------+------+
+
+Report Instance Areas: 
++------+---------+-------+------+
+|      |Instance |Module |Cells |
++------+---------+-------+------+
+|1     |top      |       |   415|
++------+---------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 910.324 ; gain = 360.523
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 13 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:11 ; elapsed = 00:00:16 . Memory (MB): peak = 910.324 ; gain = 251.246
+Synthesis Optimization Complete : Time (s): cpu = 00:00:16 ; elapsed = 00:00:18 . Memory (MB): peak = 910.324 ; gain = 360.523
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Netlist 29-17] Analyzing 26 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 925.090 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 2 instances were transformed.
+  OBUFDS => OBUFDS_DUAL_BUF (INV, OBUFDS, OBUFDS): 2 instances
+
+INFO: [Common 17-83] Releasing license: Synthesis
+35 Infos, 29 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:21 ; elapsed = 00:00:23 . Memory (MB): peak = 925.090 ; gain = 628.414
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 925.090 ; gain = 0.000
+WARNING: [Constraints 18-5210] No constraints selected for write.
+Resolution: This message can indicate that there are no constraints for the design, or it can indicate that the used_in flags are set such that the constraints are ignored. This later case is used when running synth_design to not write synthesis constraints to the resulting checkpoint. Instead, project constraints are read when the synthesized design is opened.
+INFO: [Common 17-1381] The checkpoint 'C:/Users/SHIWA/Documents/GitHub/QUANTUM/Qantum Time-Card/FPGA/Open-Source/Implementation/Xilinx/TimeCard_Production/TimeCard/TimeCard.runs/synth_1/TimeCardTop.dcp' has been generated.
+INFO: [runtcl-4] Executing : report_utilization -file TimeCardTop_utilization_synth.rpt -pb TimeCardTop_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Sun Jan 14 23:22:22 2024...

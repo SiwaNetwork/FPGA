@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="impl_1" LaunchPart="xc7a100tfgg484-1" LaunchTime="1705263747">
+  <File Type="BITSTR-BMM" Name="TimeCardTop_bd.bmm"/>
+  <File Type="OPT-METHODOLOGY-DRC" Name="TimeCardTop_methodology_drc_opted.rpt"/>
+  <File Type="INIT-TIMING" Name="TimeCardTop_timing_summary_init.rpt"/>
+  <File Type="ROUTE-PWR" Name="TimeCardTop_power_routed.rpt"/>
+  <File Type="PA-TCL" Name="TimeCardTop.tcl"/>
+  <File Type="OPT-TIMING" Name="TimeCardTop_timing_summary_opted.rpt"/>
+  <File Type="OPT-DCP" Name="TimeCardTop_opt.dcp"/>
+  <File Type="ROUTE-PWR-SUM" Name="TimeCardTop_power_summary_routed.pb"/>
+  <File Type="REPORTS-TCL" Name="TimeCardTop_reports.tcl"/>
+  <File Type="OPT-DRC" Name="TimeCardTop_drc_opted.rpt"/>
+  <File Type="OPT-HWDEF" Name="TimeCardTop.hwdef"/>
+  <File Type="PWROPT-DCP" Name="TimeCardTop_pwropt.dcp"/>
+  <File Type="PWROPT-DRC" Name="TimeCardTop_drc_pwropted.rpt"/>
+  <File Type="PWROPT-TIMING" Name="TimeCardTop_timing_summary_pwropted.rpt"/>
+  <File Type="PLACE-DCP" Name="TimeCardTop_placed.dcp"/>
+  <File Type="PLACE-IO" Name="TimeCardTop_io_placed.rpt"/>
+  <File Type="PLACE-CLK" Name="TimeCardTop_clock_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL" Name="TimeCardTop_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL-PB" Name="TimeCardTop_utilization_placed.pb"/>
+  <File Type="PLACE-CTRL" Name="TimeCardTop_control_sets_placed.rpt"/>
+  <File Type="PLACE-SIMILARITY" Name="TimeCardTop_incremental_reuse_placed.rpt"/>
+  <File Type="PLACE-PRE-SIMILARITY" Name="TimeCardTop_incremental_reuse_pre_placed.rpt"/>
+  <File Type="BG-BGN" Name="TimeCardTop.bgn"/>
+  <File Type="PLACE-TIMING" Name="TimeCardTop_timing_summary_placed.rpt"/>
+  <File Type="POSTPLACE-PWROPT-DCP" Name="TimeCardTop_postplace_pwropt.dcp"/>
+  <File Type="BG-BIN" Name="TimeCardTop.bin"/>
+  <File Type="POSTPLACE-PWROPT-TIMING" Name="TimeCardTop_timing_summary_postplace_pwropted.rpt"/>
+  <File Type="PHYSOPT-DCP" Name="TimeCardTop_physopt.dcp"/>
+  <File Type="PHYSOPT-DRC" Name="TimeCardTop_drc_physopted.rpt"/>
+  <File Type="BITSTR-MSK" Name="TimeCardTop.msk"/>
+  <File Type="PHYSOPT-TIMING" Name="TimeCardTop_timing_summary_physopted.rpt"/>
+  <File Type="ROUTE-ERROR-DCP" Name="TimeCardTop_routed_error.dcp"/>
+  <File Type="ROUTE-DCP" Name="TimeCardTop_routed.dcp"/>
+  <File Type="ROUTE-BLACKBOX-DCP" Name="TimeCardTop_routed_bb.dcp"/>
+  <File Type="ROUTE-DRC" Name="TimeCardTop_drc_routed.rpt"/>
+  <File Type="ROUTE-DRC-PB" Name="TimeCardTop_drc_routed.pb"/>
+  <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
+  <File Type="BITSTR-LTX" Name="TimeCardTop.ltx"/>
+  <File Type="ROUTE-DRC-RPX" Name="TimeCardTop_drc_routed.rpx"/>
+  <File Type="BITSTR-MMI" Name="TimeCardTop.mmi"/>
+  <File Type="ROUTE-METHODOLOGY-DRC" Name="TimeCardTop_methodology_drc_routed.rpt"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="TimeCardTop_methodology_drc_routed.rpx"/>
+  <File Type="BITSTR-SYSDEF" Name="TimeCardTop.sysdef"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="TimeCardTop_methodology_drc_routed.pb"/>
+  <File Type="ROUTE-PWR-RPX" Name="TimeCardTop_power_routed.rpx"/>
+  <File Type="ROUTE-STATUS" Name="TimeCardTop_route_status.rpt"/>
+  <File Type="ROUTE-STATUS-PB" Name="TimeCardTop_route_status.pb"/>
+  <File Type="ROUTE-TIMINGSUMMARY" Name="TimeCardTop_timing_summary_routed.rpt"/>
+  <File Type="ROUTE-TIMING-PB" Name="TimeCardTop_timing_summary_routed.pb"/>
+  <File Type="ROUTE-TIMING-RPX" Name="TimeCardTop_timing_summary_routed.rpx"/>
+  <File Type="ROUTE-SIMILARITY" Name="TimeCardTop_incremental_reuse_routed.rpt"/>
+  <File Type="ROUTE-CLK" Name="TimeCardTop_clock_utilization_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW" Name="TimeCardTop_bus_skew_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW-PB" Name="TimeCardTop_bus_skew_routed.pb"/>
+  <File Type="ROUTE-BUS-SKEW-RPX" Name="TimeCardTop_bus_skew_routed.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-DCP" Name="TimeCardTop_postroute_physopt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="TimeCardTop_postroute_physopt_bb.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="TimeCardTop_timing_summary_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="TimeCardTop_timing_summary_postroute_physopted.pb"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="TimeCardTop_timing_summary_postroute_physopted.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW" Name="TimeCardTop_bus_skew_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-PB" Name="TimeCardTop_bus_skew_postroute_physopted.pb"/>
+  <File Type="BG-BIT" Name="TimeCardTop.bit"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="TimeCardTop_bus_skew_postroute_physopted.rpx"/>
+  <File Type="BITSTR-RBT" Name="TimeCardTop.rbt"/>
+  <File Type="BITSTR-NKY" Name="TimeCardTop.nky"/>
+  <File Type="BG-DRC" Name="TimeCardTop.drc"/>
+  <File Type="RDI-RDI" Name="TimeCardTop.vdi"/>
+  <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PPRDIR/../../../../Modules/BufgMux/BufgMux_IPI.vhd">
+      <FileInfo>
+        <Attr Name="Library" Val="xil_defaultlib"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../../../../Package/TimeCard_Package.vhd">
+      <FileInfo>
+        <Attr Name="Library" Val="TimeCardLib"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../Top/TimeCardTop.vhd">
+      <FileInfo>
+        <Attr Name="Library" Val="TimeCardLib"/>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="TimeCardTop"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1">
+    <Filter Type="Utils"/>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
+      <Desc>Default settings for Implementation.</Desc>
+    </StratHandle>
+    <Step Id="init_design"/>
+    <Step Id="opt_design"/>
+    <Step Id="power_opt_design"/>
+    <Step Id="place_design"/>
+    <Step Id="post_place_power_opt_design"/>
+    <Step Id="phys_opt_design"/>
+    <Step Id="route_design"/>
+    <Step Id="post_route_phys_opt_design"/>
+    <Step Id="write_bitstream"/>
+  </Strategy>
+</GenRun>
