@@ -25,6 +25,69 @@ set ScriptFolder [file dirname $ScriptFile]
 
 cd $ScriptFolder
 
+# Ensure constrs_golden fileset exists
+if {[string equal [get_filesets -quiet constrs_golden] ""]} {
+    puts "Creating constrs_golden fileset..."
+    create_fileset -constrset constrs_golden
+    set obj [get_filesets constrs_golden]
+    
+    # Add constraint files
+    set file "$ScriptFolder/Constraints/PinoutConstraint.xdc"
+    if {[file exists $file]} {
+        add_files -norecurse -fileset $obj $file
+        set file_obj [get_files -of_objects [get_filesets constrs_golden] [list "*PinoutConstraint.xdc"]]
+        set_property "file_type" "XDC" $file_obj
+    }
+    
+    set file "$ScriptFolder/Constraints/TimingConstraint.sdc"
+    if {[file exists $file]} {
+        add_files -norecurse -fileset $obj $file
+        set file_obj [get_files -of_objects [get_filesets constrs_golden] [list "*TimingConstraint.sdc"]]
+        set_property "file_type" "SDC" $file_obj
+        set_property used_in_synthesis false $file_obj
+    }
+    
+    set file "$ScriptFolder/Constraints/GoldenImageConstraint.xdc"
+    if {[file exists $file]} {
+        add_files -norecurse -fileset $obj $file
+        set file_obj [get_files -of_objects [get_filesets constrs_golden] [list "*GoldenImageConstraint.xdc"]]
+        set_property "file_type" "XDC" $file_obj
+    }
+    
+    set_property "target_constrs_file" "$ScriptFolder/Constraints/PinoutConstraint.xdc" $obj
+}
+
+# Get Vivado version for flow names
+set VivadoVersion [lindex [split [version -short] "."] 0]
+set Synthesis_Flow "Vivado Synthesis $VivadoVersion"
+set Implementation_Flow "Vivado Implementation $VivadoVersion"
+
+# Create 'synth_golden' run if not found
+if {[string equal [get_runs -quiet synth_golden] ""]} {
+    puts "Creating synth_golden run..."
+    create_run -name synth_golden -part xc7a100tfgg484-1 -flow $Synthesis_Flow -strategy "Vivado Synthesis Defaults" -report_strategy {No Reports} -constrset constrs_golden
+} else {
+    set_property strategy "Vivado Synthesis Defaults" [get_runs synth_golden]
+    set_property flow $Synthesis_Flow [get_runs synth_golden]
+}
+set obj [get_runs synth_golden]
+set_property -name "strategy" -value "Vivado Synthesis Defaults" -objects $obj
+set_property -name "steps.synth_design.args.more options" -value "-generic GoldenImage_Gen=true" -objects $obj
+
+# Create 'impl_golden' run if not found
+if {[string equal [get_runs -quiet impl_golden] ""]} {
+    puts "Creating impl_golden run..."
+    create_run -name impl_golden -part xc7a100tfgg484-1 -flow $Implementation_Flow -strategy "Vivado Implementation Defaults" -report_strategy {No Reports} -constrset constrs_golden -parent_run synth_golden
+} else {
+    set_property strategy "Vivado Implementation Defaults" [get_runs impl_golden]
+    set_property flow $Implementation_Flow [get_runs impl_golden]
+}
+set obj [get_runs impl_golden]
+set_property -name "strategy" -value "Vivado Implementation Defaults" -objects $obj
+set_property -name "steps.write_bitstream.args.readback_file" -value "0" -objects $obj
+set_property -name "steps.write_bitstream.args.verbose" -value "0" -objects $obj
+set_property -name "steps.write_bitstream.args.BIN_FILE" -value "1" -objects $obj
+
 # current time
 set SystemTime [clock seconds]
 

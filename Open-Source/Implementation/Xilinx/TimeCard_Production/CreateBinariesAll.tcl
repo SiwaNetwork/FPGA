@@ -25,6 +25,17 @@ set ScriptFolder [file dirname $ScriptFile]
 
 cd $ScriptFolder
 
+# Open project if not already open
+set proj_name "TimeCard"
+set proj_file "$ScriptFolder/$proj_name/$proj_name.xpr"
+
+if {[current_project -quiet] == ""} {
+    puts "Opening project: $proj_file"
+    open_project $proj_file
+} else {
+    puts "Project already open: [current_project]"
+}
+
 source "$ScriptFolder/CreateBinariesGolden.tcl"
 source "$ScriptFolder/CreateBinaries.tcl"
 
