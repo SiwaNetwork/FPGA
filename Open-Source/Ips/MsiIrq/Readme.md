@@ -1,37 +1,37 @@
-# MSI IRQ Design Description
-## Contents
+# Описание архитектуры MSI IRQ
+## Содержание
 
-[1. Context Overview](#1-context-overview)
+[1. Общий обзор контекста](#1-context-overview)
 
-[2. Interface Description](#2-interface-description)
+[2. Описание интерфейса](#2-interface-description)
 
-[3. Design Description](#3-design-description)
+[3. Описание архитектуры](#3-design-description)
 
-## 1. Context Overview
-The MSI IRQ receives single interrupts of the FPGA cores and puts them into a message for the[AXI-PCIe bridge](https://www.xilinx.com/products/intellectual-property/axi_pcie.html).
-Once a message is ready a request is set and it waits until the grant signal from the Xilinx Core. If there are several interrupts pending the messages are sent with the round-robin principle. 
-It supports up to 32 Interrupt Requests. 
+## 1. Общий обзор контекста
+MSI IRQ принимает отдельные прерывания ядер FPGA и помещает их в сообщение для [AXI-PCIe bridge](https://www.xilinx.com/products/intellectual-property/axi_pcie.html).
+Как только сообщение готово, устанавливается запрос, и ожидается сигнал grant от Xilinx Core. Если есть несколько ожидающих прерываний, сообщения отправляются по принципу round-robin.
+Он поддерживает до 32 запросов прерываний (Interrupt Requests).
 
-## 2. Interface Description
+## 2. Описание интерфейса
 ### 2.1 MSI IRQ IP
-The interface of the MSI IRQ is:
-- System Reset and System Clock as inputs
-- The list of interrupt requests, as inputs
-- The Enable of MSI Irq, as input from the MSI controller 
-- The Grant access of MSI, as input from the MSI controller
-- The request valid flag of the MSI IRQ, as output to the MSI controller
-- The message number of the MSI IRQ, as output to the MSI controller
+Интерфейс MSI IRQ:
+- System Reset и System Clock на входе
+- Список запросов прерываний на входе
+- Разрешение MSI Irq на входе от MSI контроллера
+- Grant доступа MSI на входе от MSI контроллера
+- Флаг запроса valid MSI IRQ на выходе к MSI контроллеру
+- Номер сообщения MSI IRQ на выходе к MSI контроллеру
  
 ![MSI IRQ IP](Additional%20Files/MsiIrqIP.PNG) 
 
-The core's configuration options are shown below
+Параметры конфигурации ядра показаны ниже
 
 ![MSI IRQ Config](Additional%20Files/MsiIrqConfig.PNG) 
 
 
-## 3 Design Description
-The core supports up to 32 interrupt requests. A generic input specifies the max number of the supported requests of the current design. 
-Another generic input, the "Level Interrupt" specifies if the external interrupt is a level interrupt.
-A level interrupt is level sensitive while the others expect a rising edge to generate a message. 
-The core sends the interrupt requests one by one (round-robin principle) to the output (AXI-PCIe bridge). 
-It waits until the request is granted and then moves on to the next request input.
+## 3 Описание архитектуры
+Ядро поддерживает до 32 запросов прерываний. Generic вход определяет максимальное количество поддерживаемых запросов текущей архитектуры.
+Другой generic вход, "Level Interrupt", определяет, является ли внешнее прерывание уровневым (level interrupt).
+Уровневое прерывание чувствительно к уровню, в то время как остальные ожидают нарастающего фронта для генерации сообщения.
+Ядро отправляет запросы прерываний один за другим (принцип round-robin) на выход (AXI-PCIe bridge).
+Оно ожидает, пока запрос не будет подтвержден (grant), а затем переходит к следующему входу запроса.

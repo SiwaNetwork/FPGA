@@ -1,71 +1,70 @@
-# Clock Detector Design Description
-## Contents
+# Описание архитектуры Clock Detector
+## Содержание
 
-[1. Context Overview](#1-context-overview)
+[1. Общий обзор контекста](#1-context-overview)
 
-[2. Interface Description](#2-interface-description)
+[2. Описание интерфейса](#2-interface-description)
 
-[3. Register Set](#3-register-set)
+[3. Набор регистров](#3-register-set)
 
-[4. Design Description](#4-design-description)
+[4. Описание архитектуры](#4-design-description)
 
-## 1. Context Overview
-The Clock Detector is a full hardware (FPGA) only implementation that detects the available clock sources and selects the clocks to be used. The selection is done with different clock selector and clock enable outputs.
-The selection is according to a priority scheme and it can be overwritten with a manual configuration.
-The configuration and monitoring of the core is done via a AXI4L slave interface.
-## 2. Interface Description
+## 1. Общий обзор контекста
+Clock Detector — это полностью аппаратная (FPGA) реализация, которая обнаруживает доступные источники тактового сигнала и выбирает тактовый сигнал для использования. Выбор выполняется с помощью различных выходов селектора тактового сигнала и разрешения тактового сигнала.
+Выбор производится в соответствии со схемой приоритетов и может быть переопределен ручной конфигурацией.
+Конфигурация и мониторинг ядра выполняются через AXI4L slave интерфейс.
+## 2. Описание интерфейса
 ### 2.1 Clock Detector IP
-The interface of the Clock Detector is:
-- System Reset and System Clock as inputs
-- The 4 available clocks, as inputs
-- The enable flags for external clock selectors, as outputs 
-- A reset output, during a transition of clock selection
-- The PPS source to be selected, as output (configuration interface with the [PPS Source Select](../PpsSourceSelector))
-- The available PPS sources, as input (monitor interface with the [PPS Source Select](../PpsSourceSelector)) 
-- An AXI4L slave interface, for configuration and monitoring of the core (and, optionally, an additional [PPS Source Select](../PpsSourceSelector) core) 
+Интерфейс Clock Detector:
+- System Reset и System Clock на входе
+- 4 доступных тактовых сигналов на входе
+- Флаги разрешения для внешних селекторов тактового сигнала на выходе
+- Выход сброса во время переключения выбора тактового сигнала
+- Выбранный источник PPS на выходе (интерфейс конфигурации с [PPS Source Select](../PpsSourceSelector))
+- Доступные источники PPS на входе (интерфейс мониторинга с [PPS Source Select](../PpsSourceSelector))
+- AXI4L slave интерфейс для конфигурации и мониторинга ядра (и, опционально, дополнительного ядра [PPS Source Select](../PpsSourceSelector))
  
 ![Clock Detector IP](Additional%20Files/ClockDetectorIP.png) 
 
-The core has configuration options for the clock and PPS selection.
+Ядро имеет параметры конфигурации для выбора тактового сигнала и PPS.
 
 ![Clock Detector IP](Additional%20Files/ClockDetectorConfig.png)
 
-## 3. Register Set
-The register set of the Clock Detector is accessible via AXI4 Light Memory Mapped. 
-All registers are 32bit wide, no burst access, no unaligned access, no byte enables, no timeouts are supported. 
-Register address space is not contiguous. Register addresses are only offsets in the memory area where the core is mapped in the AXI inter connects. 
-Non existing register access in the mapped memory area is answered with a slave decoding error.
-The Register set configures which source should be used as clock and monitors which is currently selected. Additionally, it provides the configuration 
-of a [PPS Source Select](../PpsSourceSelector) core. 
-#### 3.1 Register Set Overview 
-The Register Set overview is shown in the table below. 
+## 3. Набор регистров
+Набор регистров Clock Detector доступен через AXI4 Light Memory Mapped.
+Все регистры имеют ширину 32 бита, не поддерживается пакетный доступ, невыровненный доступ, byte enables, таймауты.
+Пространство адресов регистров не является непрерывным. Адреса регистров являются только смещениями в области памяти, где ядро отображается в AXI interconnect.
+Обращение к несуществующему регистру в отображенной области памяти возвращает ошибку декодирования slave.
+Набор регистров конфигурирует, какой источник должен использоваться в качестве тактового сигнала, и отслеживает, какой источник в данный момент выбран. Кроме того, он предоставляет конфигурацию ядра [PPS Source Select](../PpsSourceSelector).
+#### 3.1 Обзор набора регистров
+Обзор набора регистров показан в таблице ниже.
 ![RegisterSet](Additional%20Files/Regset_Overview.png)
-#### 3.2 Register Decription
-The tables below describe the registers of the Clock Detector.
+#### 3.2 Описание регистров
+Таблицы ниже описывают регистры Clock Detector.
 ![SourceSelected](Additional%20Files/Regset1_SourceSelected.png)
 ![SourceSelect](Additional%20Files/Regset2_SourceSelect.png)
 ![Version](Additional%20Files/Regset3_Version.png)
-## 4 Design Description
-The Clock Detector detects the available clock inputs and selects the clocks to be used, based on a priority scheme and a configuration. 
-The component consists of 3 main operations:
-- Detect the available clocks
-- Select the clocks
-- Interface with the CPU (AXI master) via the an AXI slave
-### 4.1 Detect the available clocks
+## 4 Описание архитектуры
+Clock Detector обнаруживает доступные входы тактового сигнала и выбирает тактовый сигнал для использования на основе схемы приоритетов и конфигурации.
+Компонент состоит из 3 основных операций:
+- Обнаружение доступных тактовых сигналов
+- Выбор тактового сигнала
+- Интерфейс с CPU (AXI master) через AXI slave
+### 4.1 Обнаружение доступных тактовых сигналов
 
-For each clock input, an availability check is performed. 
-A "slow" clock is created for each clock domain. At the system clock domain, the toggling of these slow clocks is checked.
-If their values do not toggle within a timeout, the input clock is considered unavailable.
+Для каждого входа тактового сигнала выполняется проверка доступности.
+Для каждого домена тактового сигнала создается "медленный" тактовый сигнал. В домене системного тактового сигнала проверяется переключение состояния этих медленных тактовых сигналов.
+Если их значения не переключаются в течение таймаута, входной тактовый сигнал считается недоступным.
 
-### 4.2 Select the clocks
-A clock is selected if it satisfies 2 conditions:
-1) The clock is available
-2)  - If the automatic selection is configured:
-     the clock has higher priority than the other available clocks
-    - If the manual selection is configured: 
-     the clock has higher priority than the other available and manually-selected clocks
+### 4.2 Выбор тактового сигнала
+тактовый сигнал выбирается, если он удовлетворяет 2 условиям:
+1)тактовый сигнал доступен
+2)  - Если настроен автоматический выбор:
+    тактовый сигнал имеет более высокий приоритет, чем другие доступные тактовые сигналы
+    - Если настроен ручной выбор:
+    тактовый сигнал имеет более высокий приоритет, чем другие доступные и выбранные вручную тактовые сигналы
 
-The table below shows how the clock selection outputs are set depending on the selection. The order of the clocks is according to the selection priority scheme (SMA 10 MHz Clock -> highest, External Clock -> lowest):
+Таблица ниже показывает, как устанавливаются выходы выбора тактового сигнала в зависимости от выбора. Порядок тактовых сигналов соответствует схеме приоритетов выбора (SMA 10 MHz Clock -> наивысший, External Clock -> наинизший):
 |Clock|Mux1|Mux2|Mux3|Wiz2|
 |-----|:--:|:--:|:--:|:--:|
 |SMA 10 MHz Clock|0|x|0|0|
@@ -74,6 +73,6 @@ The table below shows how the clock selection outputs are set depending on the s
 |MAC 10 MHz Clock|x|1|1|0|
 |External Clock|x|x|x|1|
 
-### 4.3 AXI slave of the Clock Detector 
-The Clock Detector includes an AXI Light Memory Mapped Slave which provides access to the registers of the core. 
-An AXI Master has to configure the Datasets with AXI writes to the registers, which is typically done by a CPU. [Chapter 3](#3-register-set) has a complete description of the register set.
+### 4.3 AXI slave Clock Detector
+Clock Detector включает AXI Light Memory Mapped Slave, который предоставляет доступ к регистрам ядра.
+AXI Master должен конфигурировать наборы данных записью в регистры через AXI, что обычно выполняется CPU. [Глава 3](#3-register-set) содержит полное описание набора регистров.

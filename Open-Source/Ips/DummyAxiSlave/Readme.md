@@ -1,40 +1,40 @@
-# Dummy Axi Slave Design Description
-## Contents
+# Описание архитектуры Dummy Axi Slave
+## Содержание
 
-[1. Context Overview](#1-context-overview)
+[1. Общий обзор контекста](#1-context-overview)
 
-[2. Interface Description](#2-interface-description)
+[2. Описание интерфейса](#2-interface-description)
 
-[3. Register Set](#3-register-set)
+[3. Набор регистров](#3-register-set)
 
-[4. Design Description](#4-design-description)
+[4. Описание архитектуры](#4-design-description)
 
-## 1. Context Overview
-The Dummy Axi Slave is an FPGA core that consists of an AXI4L slave interface. This interface provides valid responses to AXI4L accesses of the CPU. 
-The core is used as a "placeholder" of a specific address range. 
+## 1. Общий обзор контекста
+Dummy Axi Slave — это ядро FPGA, состоящее из AXI4L slave интерфейса. Этот интерфейс предоставляет корректные ответы на обращения AXI4L со стороны CPU.
+Ядро используется как "заглушка" для конкретного диапазона адресов.
 
-For example, if the CPU's driver tries to access via AXI4L an address which does not belong in a specified register of any instantiated FPGA core, then the bus will return access fault.  On the other hand, if the CPU's driver accesses an address 
-in the DummyAxiSlave address range, then the core will send an empty but valid AXI4L response. 
+Например, если драйвер CPU пытается обратиться через AXI4L к адресу, который не принадлежит к указанному регистру ни одного инстанцированного ядра FPGA, то шина вернет ошибку доступа. С другой стороны, если драйвер CPU обращается к адресу
+в диапазоне DummyAxiSlave, то ядро отправит пустой, но корректный ответ AXI4L.
 
-The intention of this core is to be used if the same CPU driver version is used for multiple FPGA versions of the Time card, which might have specified different address ranges (e.g. due to different core instantiations).  
+Цель этого ядра — использоваться, если одна и та же версия драйвера CPU используется для нескольких версий FPGA Time card, которые могут иметь разные указанные диапазоны адресов (например, из-за разных инстанциаций ядер).
 
-## 2. Interface Description
+## 2. Описание интерфейса
 ### 2.1 Core List IP
-The interface of the Core List is:
-- System Reset and System Clock as inputs
-- An AXI4L slave interface, via which the CPU reads and writes data to the specified address space
+Интерфейс Core List:
+- System Reset и System Clock на входе
+- AXI4L slave интерфейс, через который CPU считывает и записывает данные в указанное адресное пространство
  
 ![DummyAxiSlave IP](Additional%20Files/DummyAxiSlave%20IP.png) 
 
-The configuration option of the core is:
-- The System Clock period in nanoseconds 
+Параметр конфигурации ядра:
+- Период System Clock в наносекундах
 
 ![DummyAxiSlave Gui](Additional%20Files/DummyAxiSlave%20Customization%20options.png)
 
-## 3. Register Set
-All addresses of the specified address range will send a valid AXI4L response when accessed. However, the actual memory size might be much smaller than the address range, so the data read from the DummyAxiSlave should not be considered valid. 
+## 3. Набор регистров
+Все адреса указанного диапазона адресов будут отправлять корректный ответ AXI4L при обращении. Однако фактический размер памяти может быть значительно меньше диапазона адресов, поэтому данные, считанные из DummyAxiSlave, не следует считать корректными.
 
-## 4 Design Description
-The Core List core consists only of an AXI4L slave that reads and writes the data from/to a RAM. The actual size of the RAM is 1 kB. If the specified address range is larger than 1 kB, then the access of address *"A"* is actually accessing the RAM address 
+## 4 Описание архитектуры
+Ядро Core List состоит только из AXI4L slave, который считывает и записывает данные из/в RAM. Фактический размер RAM составляет 1 кБ. Если указанный диапазон адресов больше 1 кБ, то обращение по адресу *"A"* фактически обращается к адресу RAM
 *"A % 1024"*.
 

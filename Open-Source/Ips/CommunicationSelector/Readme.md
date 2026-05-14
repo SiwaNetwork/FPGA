@@ -1,66 +1,66 @@
-# Communication Selector Design Description
-## Contents
+# Описание архитектуры Communication Selector
+## Содержание
 
-[1. Context Overview](#1-context-overview)
+[1. Общий обзор контекста](#1-context-overview)
 
-[2. Interface Description](#2-interface-description)
+[2. Описание интерфейса](#2-interface-description)
 
-[3. Register Set](#3-register-set)
+[3. Набор регистров](#3-register-set)
 
-[4. Design Description](#4-design-description)
+[4. Описание архитектуры](#4-design-description)
 
-## 1. Context Overview
-The Communication Selector is a full hardware (FPGA) implementation that selects which communication interface will be used between the FPGA and the module's clock (e.g. MAC, OCXO). The selection can be received by an AXI configuration register (e.g. by using [AXI GPIO](https://www.xilinx.com/products/intellectual-property/axi_gpio.html#documentation)) and it is set as UART (Selection:'0') or I<sup>2</sup>C (Selection:'1'). The default configuration is UART communication.
+## 1. Общий обзор контекста
+Communication Selector — это полностью аппаратная (FPGA) реализация, которая выбирает, какой коммуникационный интерфейс будет использоваться между FPGA и модулем тактового сигнала (например, MAC, OCXO). Выбор может быть получен из регистра конфигурации AXI (например, с помощью [AXI GPIO](https://www.xilinx.com/products/intellectual-property/axi_gpio.html#documentation)) и устанавливается как UART (Selection:'0') или I<sup>2</sup>C (Selection:'1'). Конфигурация по умолчанию — UART.
 
-## 2. Interface Description
+## 2. Описание интерфейса
 ### 2.1 Communication Selector IP
-The interface of the Communication Selector is:
-- The selection of the communication from an AXI register as input
-- The UART interface (inputs and outputs) 
-- The UART Interrupt request as input
-- The I<sup>2</sup>C interface (inputs and outputs)
-- The UART Interupt request as input 
+Интерфейс Communication Selector:
+- Выбор коммуникационного интерфейса из регистра AXI на входе
+- UART интерфейс (входы и выходы)
+- UART Interrupt request на входе
+- I<sup>2</sup>C интерфейс (входы и выходы)
+- UART Interrupt request на входе
 
 ![CommunicatioSelectorIP](Additional%20Files/CommunicationSelectorIP.png)
 
-The core providess no configuration options 
+Ядро не предоставляет параметров конфигурации
 
-## 3. Register Set
-The Communication Selector has no dedicated AXI4L interface. It receives though the Selection input which can provided via an external AXI interface. This interface is implementation specific, and outside of this document's scope.
+## 3. Набор регистров
+Communication Selector не имеет выделенного интерфейса AXI4L. Он получает вход Selection, который может быть предоставлен через внешний AXI интерфейс. Этот интерфейс зависит от реализации и выходит за рамки данного документа.
 
-## 4 Design Description
-The core multiplexes a UART and an I<sup> 2</sup>C interface so that the same board pinout can support both interfaces. Since the I<sup> 2</sup>C interface has more pins than the UART, when the UART interfaces is selected, some of the pins will be unused.
+## 4 Описание архитектуры
+Ядро мультиплексирует UART и I<sup>2</sup>C интерфейсы таким образом, что один и тот же вывод платы может поддерживать оба интерфейса. Поскольку интерфейс I<sup>2</sup>C имеет больше выводов, чем UART, при выборе UART интерфейса некоторые выводы будут неиспользованными.
 
 ![CommunicationMux](Additional%20Files/CommunicationMux.png)
 
 
 
-The table below shows the port assignment of inputs to outputs when Selection is 0 (UART):
+Таблица ниже показывает назначение входов на выходы при Selection = 0 (UART):
 
 |                       |SCL In|SCL Out|SCL T|SDA In|SDA Out|SDA T|IRQ|
 |-----------------------|:----:|:-----:|:---:|:----:|:-----:|:---:|:-:|
 |UART Rx                ||||X|
 |UART Tx                ||X|
 |UART IRQ               |||||||X|
-|I<sup> 2</sup>C SCL In |
-|I<sup> 2</sup>C SCL Out|
-|I<sup> 2</sup>C SCL T  |
-|I<sup> 2</sup>C SDA In |
-|I<sup> 2</sup>C SDA Out|
-|I<sup> 2</sup>C SDA T  |
-|I<sup> 2</sup>C IRQ    |
+|I<sup>2</sup>C SCL In |
+|I<sup>2</sup>C SCL Out|
+|I<sup>2</sup>C SCL T  |
+|I<sup>2</sup>C SDA In |
+|I<sup>2</sup>C SDA Out|
+|I<sup>2</sup>C SDA T  |
+|I<sup>2</sup>C IRQ    |
 
-The table below shows the port assignment of inputs to outputs when Selection is 1 (I<sup> 2</sup>C):
+Таблица ниже показывает назначение входов на выходы при Selection = 1 (I<sup>2</sup>C):
 
 |                       |SCL In|SCL Out|SCL T|SDA In|SDA Out|SDA T|IRQ|
 |-----------------------|:----:|:-----:|:---:|:----:|:-----:|:---:|:-:|
 |UART Rx                |
 |UART Tx                |
 |UART IRQ               |
-|I<sup> 2</sup>C SCL In |X|
-|I<sup> 2</sup>C SCL Out||X|
-|I<sup> 2</sup>C SCL T  |||X|
-|I<sup> 2</sup>C SDA In ||||X|
-|I<sup> 2</sup>C SDA Out|||||X|
-|I<sup> 2</sup>C SDA T  ||||||X|
-|I<sup> 2</sup>C SDA IRQ|||||||X|
+|I<sup>2</sup>C SCL In |X|
+|I<sup>2</sup>C SCL Out||X|
+|I<sup>2</sup>C SCL T  |||X|
+|I<sup>2</sup>C SDA In ||||X|
+|I<sup>2</sup>C SDA Out|||||X|
+|I<sup>2</sup>C SDA T  ||||||X|
+|I<sup>2</sup>C SDA IRQ|||||||X|

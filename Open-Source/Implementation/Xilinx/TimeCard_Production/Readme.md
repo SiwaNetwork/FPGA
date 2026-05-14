@@ -229,20 +229,20 @@ RGB светодиоды (SMA1-4 и GNSS1) могут управляться ч�
 
 (Альтернативно, это может быть запущено через меню Tool=>Run Tcl Script… в GUI Vivado)
 
-Скрипт добавит все необходимые файлы в проект, а также ограничения, так что все готово для генерации битстрима для FPGA.
+Скрипт добавит все необходимые файлы в проект, а также ограничения, так что все готово для генерации bitstream для FPGA.
 Проект будет создан в следующей папке:
 
 */[YOUR_PATH]/Implementation/Xilinx/TimeCard_Production/TimeCard*
 
-### 8.2 Синтез, реализация и генерация битстрима
+### 8.2 Синтез, реализация и генерация bitstream
 
-Скрипт генерации битстрима запускает синтез и реализацию и генерирует битстримы для указанных запусков проекта:
-- Скрипт */[YOUR_PATH]/Implementation/Xilinx/TimeCard_Production/CreateBinaries.tcl* запускает синтез/реализацию проекта TimeCardOS_Production, генерирует битстримы и обновляет соответствующим образом Factory_TimeCardOS_Production.bin
-- Скрипт */[YOUR_PATH]/Implementation/Xilinx/TimeCard_Production/CreateBinariesGolden.tcl* запускает синтез/реализацию проекта Golden_TimeCardOS_Production, генерирует битстримы и обновляет соответствующим образом Factory_TimeCardOS_Production.bin
-- Скрипт */[YOUR_PATH]/Implementation/Xilinx/TimeCard_Production/CreateBinariesAll.tcl* запускает синтез/реализацию обоих проектов, генерирует соответствующие битстримы и обновляет соответствующим образом Factory_TimeCardOS_Production.bin. Он также создает файл TimeCardOS_Production_Gotham.bin, который основан на TimeCardOS_Production.bin и имеет дополнительный 16-байтовый заголовок с ID PCIe. 
+Скрипт генерации bitstream запускает синтез и реализацию и генерирует bitstreams для указанных запусков проекта:
+- Скрипт */[YOUR_PATH]/Implementation/Xilinx/TimeCard_Production/CreateBinaries.tcl* запускает синтез/реализацию проекта TimeCardOS_Production, генерирует bitstreams и обновляет соответствующим образом Factory_TimeCardOS_Production.bin
+- Скрипт */[YOUR_PATH]/Implementation/Xilinx/TimeCard_Production/CreateBinariesGolden.tcl* запускает синтез/реализацию проекта Golden_TimeCardOS_Production, генерирует bitstreams и обновляет соответствующим образом Factory_TimeCardOS_Production.bin
+- Скрипт */[YOUR_PATH]/Implementation/Xilinx/TimeCard_Production/CreateBinariesAll.tcl* запускает синтез/реализацию обоих проектов, генерирует соответствующие bitstreams и обновляет соответствующим образом Factory_TimeCardOS_Production.bin. Он также создает файл TimeCardOS_Production_Gotham.bin, который основан на TimeCardOS_Production.bin и имеет дополнительный 16-байтовый заголовок с ID PCIe. 
 
 Бинарные файлы копируются в папку */[YOUR_PATH]/Implementation/Xilinx/TimeCard_Production/Binaries/*. 
-Существующие битстримы в папке Binaries перезаписываются, а также создается копия файлов в подпапке папки Binaries с временной меткой. Таким образом, последний запуск реализации всегда находится в одном и том же месте, но резервные копии предыдущих (и текущих) запусков все еще доступны.
+Существующие bitstreams в папке Binaries перезаписываются, а также создается копия файлов в подпапке папки Binaries с временной меткой. Таким образом, последний запуск реализации всегда находится в одном и том же месте, но резервные копии предыдущих (и текущих) запусков все еще доступны.
 
 Последние бинарные файлы можно найти здесь:
 - */[YOUR_PATH]/Implementation/Xilinx/TimeCard_Production/Binaries/Factory_TimeCardOS_Production.bin*
@@ -283,9 +283,9 @@ RGB светодиоды (SMA1-4 и GNSS1) могут управляться ч�
 
 Образы FPGA хранятся в папке [Binaries](Binaries/).
 
-### 9.1 Битстримы с конфигурацией Fallback
+### 9.1 Bitstreams с конфигурацией Fallback
 
-Проект FPGA разделен на два различных битстрима/бинарных файла для обеспечения безопасного обновления в полевых условиях. 
+Проект FPGA разделен на два различных bitstreams/бинарных файла для обеспечения безопасного обновления в полевых условиях. 
 - Первый образ - это Golden/Fallback образ *Golden_TimeCardOS_Production.bin*. Он содержит только ограниченную функциональность, которая обеспечивает доступ к SPI Flash. 
 - Второй образ - это последняя версия обычного образа *TimeCardOS_Production.bin*. Он используется для нормальной работы и является тем, который заменяется при обновлении в полевых условиях.
 
@@ -295,7 +295,7 @@ RGB светодиоды (SMA1-4 и GNSS1) могут управляться ч�
 Подробности об этом подходе Multiboot/Fallback можно найти в примечании по применению Xilinx 
 [MultiBoot with 7 Series FPGAs and BPI](https://www.xilinx.com/support/documentation/application_notes/xapp1246-multiboot-bpi.pdf).
 
-Образ *Factory_TimeCardOS_Production.bin* содержит два битстрима и должен использоваться для программирования SPI flash в первый раз, например, во время производства. 
+Образ *Factory_TimeCardOS_Production.bin* содержит два bitstreams и должен использоваться для программирования SPI flash в первый раз, например, во время производства. 
 
 Этот объединенный образ имеет следующую структуру:
 
@@ -313,7 +313,7 @@ RGB светодиоды (SMA1-4 и GNSS1) могут управляться ч�
 |0x00400000    |0x006CA157    |TimeCardOS_Production.bit       |
 
 Образ *TimeCardOS_Production.bin* - это образ обновления/обычный образ и должен использоваться для обновления в полевых условиях через SPI.
-Для обновления этот битстрим должен быть размещен по адресу 0x00400000 в SPI flash.
+Для обновления этот bitstream должен быть размещен по адресу 0x00400000 в SPI flash.
 
 ### 9.2 Шаги программирования SPI (нелетучий)
 
@@ -342,7 +342,7 @@ RGB светодиоды (SMA1-4 и GNSS1) могут управляться ч�
 
    ![Config Mem Program](Additional%20Files/ConfigMemProgram.png) 
 
-10. Выберите битстрим, который хотите запрограммировать:
+10. Выберите bitstream, который хотите запрограммировать:
 **Factory_TimeCardOS_Production.bin** 
 
 ВАЖНОЕ ПРИМЕЧАНИЕ: 

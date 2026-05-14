@@ -1,48 +1,48 @@
-# Adjustable Clock Design Description
-## Contents
+# Описание архитектуры Adjustable Clock
+## Содержание
 
-[1. Context Overview](#1-context-overview)
+[1. Общий обзор контекста](#1-context-overview)
 
-[2. Interface Description](#2-interface-description)
+[2. Описание интерфейса](#2-interface-description)
 
-[3. Register Set](#3-register-set)
+[3. Набор регистров](#3-register-set)
 
-[4. Design Description](#4-design-description)
+[4. Описание архитектуры](#4-design-description)
 
-## 1. Context Overview
-The Adjustable Clock consists of a timer clock in the Second and Nanosecond format that can be frequency and phase adjusted.
-It adds the clock period it runs on, in nanoseconds, every clock cycle.The nanosecond counter has an overflow at 1000000000 nanoseconds. At each overflow of the nano-second counter it will add an additional second to the seconds counter.
-For adjustments, additional nanoseconds can be added or subtracted from the standard period to adjust frequency and phase. When small offset adjustments are not suitable, the time can be overwritten to hard set the clock to a new time e.g. for the startup phase where a jump from the 1.1.1970 to the present is required.
-An adjustment process takes the offset, drift and time adjustments as inputs and converts them into a combined adjustment which is then applied to the timer clock. The offset and drift is converted into evenly spread adjustments which allows smooth corrections on the clock without time jumps. E.g. a drift of 1ppm is adjusted as 1 ns every 5000000 clock cycles at 50MHz. In parallel to the correction a quality computation done to mark the in-sync state of the clock if corrections are below a certain threshold for at least 4 corrections.
-The drift and offset adjustments inputs are normaly outputs of PI servo loops (not required though), which are not part of the Adjustable clock. The PI servo loop parameters however are provided by the configuration of the Adjustable Clock to  output signals. The drift and offset adjustments of the servos can be chosen individually, since frequency changes might happen quite slowly where offset adjustments probably shall be done much faster. 
-Since the Adjustable Clock is the heart of a synchronization solution it can take several (5) adjustment inputs from different cores as input. Only one adjustment input is taken as source for corrections at the time. From the Registerset, the multiplexer gets the source selection of the adjustments. The adjustments can be taken by one of the 5 source inputs or by the CPU via the AXI registers (REG mode). In this case, the adjustment calculations (e.g. also via PI servo loops) are executed on a CPU and their outputs are provided to the core as time, offset and drift adjustements. 
-Additionally, the Registerset allows reading the in-sync state and taking a snapshot of the time.  
+## 1. Общий обзор контекста
+Adjustable Clock состоит из таймерного счетчика в формате Секунды и Наносекунды, который может регулироваться по частоте и фазе.
+Каждый такт системноготактового сигнала добавляет период тактового сигнала в наносекундах к текущему времени. Счетчик наносекунд переполняется на отметке 1000000000 наносекунд. При каждом переполнении счетчика наносекунд к счетчику секунд добавляется одна секунда.
+Для корректировки к стандартному периоду можно добавлять или вычитать дополнительные наносекунды, чтобы скорректировать частоту и фазу. Когда малые корректировки смещения неприменимы, время можно перезаписать, чтобы жестко установить часы на новое время, например, на этапе запуска, когда требуется скачок с 1.1.1970 до текущего времени.
+Процесс корректировки принимает на вход смещение, дрейф и корректировки времени и преобразует их в комбинированную корректировку, которая затем применяется к таймерному счетчику. Смещение и дрейф преобразуются в равномерно распределенные корректировки, что позволяет выполнять плавные коррекции часов без скачков времени. Например, дрейф 1 ppm корректируется как 1 нс каждые 5000000 тактов при частоте 50 МГц. Параллельно с коррекцией выполняется вычисление качества, чтобы отметить состояние синхронизации часов, если корректировки в течение как минимум 4 коррекций остаются ниже определенного порога.
+Входы корректировки дрейфа и смещения обычно являются выходами PI-сервоконтуров (хотя это и не обязательно), которые не являются частью Adjustable Clock. Однако параметры PI-сервоконтура предоставляются конфигурацией Adjustable Clock для выходных сигналов. Корректировки дрейфа и смещения сервоконтуров можно выбирать индивидуально, поскольку изменения частоты могут происходить довольно медленно, тогда как корректировки смещения, вероятно, следует выполнять значительно быстрее.
+Поскольку Adjustable Clock является сердцем решения для синхронизации, он может принимать несколько (5) входов корректировки от различных ядер. Одновременно только один вход корректировки используется в качестве источника для коррекций. Из набора регистров мультиплексор получает выбор источника корректировок. Корректировки могут приниматься от одного из 5 входов источников или от CPU через регистры AXI (режим REG). В этом случае расчеты корректировки (например, также через PI-сервоконтуры) выполняются на CPU, а их выходные данные предоставляются ядру в виде корректировок времени, смещения и дрейфа.
+Кроме того, набор регистров позволяет считывать состояние синхронизации и делать снимок времени.
 
-## 2. Interface Description
-### 2.1 ADjustable Clock IP
-The interfave of the Adjustable Clock is:
-- System Reset and System Clock as inputs
-- An AXI4L slave interface, via which the CPU can read and write the Adjustable Clock registers (including the register Adjustments, if in REG mode)
-- The 5 input adjustemnts of time, offset and drift
-- The adjustable clock output, which is provided to other cores as reference time
-- The PI servo coefficients of offset and drift as outputs, as received by the Registerset by the CPU. If a synchronization source other than REG is selected (e.g. input source 1 (maybe a PPS slave)), these coefficients should be used by the corresponding PI servo loops.  
-- The adjustable clock's status flag outputs (InSync and InHoldover)
+## 2. Описание интерфейса
+### 2.1 Adjustable Clock IP
+Интерфейс Adjustable Clock:
+- System Reset и System Clock на входе
+- AXI4L slave интерфейс, через который CPU может считывать и записывать регистры Adjustable Clock (включая регистры корректировок, если включен режим REG)
+- 5 входов корректировок времени, смещения и дрейфа
+- Выход регулируемых часов, который предоставляется другим ядрам в качестве опорного времени
+- Коэффициенты PI-сервоконтура смещения и дрейфа на выходе, как полученные из набора регистров от CPU. Если выбран источник синхронизации, отличный от REG (например, входной источник 1 (возможно, PPS slave)), эти коэффициенты должны использоваться соответствующими PI-сервоконтурами.
+- Флаги состояния регулируемых часов на выходе (InSync и InHoldover)
  
 ![Adjustable Clock IP](Additional%20Files/Adjustable%20Clock%20IP.png) 
 
-The configuration options of the core are:
-- The System Clock period in nanoseconds. 
-- The InSync threshold in nanoseconds. At least 4 consecutive offset adjustment should be less than this thershold, in order for the adjustbale clock to be considered synchronized. 
-- The InHoldover timeout in seconds. If the adjustable clock is already synchronized (i.e. InSync is active) and the no offset adjustment has been received for the given timeout, then the clock is considered InHoldover.  
+Параметры конфигурации ядра:
+- Период System Clock в наносекундах.
+- Порог InSync в наносекундах. По крайней мере 4 последовательных корректировки смещения должны быть меньше этого порога, чтобы Adjustable Clock считался синхронизированным.
+- Таймаут InHoldover в секундах. Если Adjustable Clock уже синхронизирован (то есть InSync активен) и в течение заданного таймаута не было получено корректировки смещения, то часы считаются находящимися в состоянии InHoldover.
 
 ![Adjustable CLock Gui](Additional%20Files/Adjustable%20Clock%20configuration.png)
-## 3. Register Set
-This is the register set of the Adjustable Clock. It is accessible via AXI4 Light Memory Mapped. All registers are 32bit wide, no burst access, no unaligned access, no byte enables, no timeouts are supported. Register address space is not contiguous. Register addresses are only offsets in the memory area where the core is mapped in the AXI inter connects. Non existing register access in the mapped memory area is answered with a slave decoding error.
-### 3.1 Register Set Overview 
-The Register Set overview is shown in the table below. 
+## 3. Набор регистров
+Это набор регистров Adjustable Clock. Доступ осуществляется через AXI4 Light Memory Mapped. Все регистры имеют ширину 32 бита, не поддерживается пакетный доступ, невыровненный доступ, byte enables, таймауты. Пространство адресов регистров не является непрерывным. Адреса регистров являются только смещениями в области памяти, где ядро отображается в AXI interconnect. Обращение к несуществующему регистру в отображенной области памяти возвращает ошибку декодирования slave.
+### 3.1 Обзор набора регистров
+Обзор набора регистров показан в таблице ниже.
 ![RegisterSet](Additional%20Files/Regset.png)
-### 3.2 Register Decription
-The tables below describe the registers of the Adjustable Clock.     
+### 3.2 Описание регистров
+Таблицы ниже описывают регистры Adjustable Clock.
 ![Control](Additional%20Files/Regset1_Control.png)
 ![Status](Additional%20Files/Regset2_Status.png)
 ![Select](Additional%20Files/Regset3_Select.png)
@@ -62,38 +62,37 @@ The tables below describe the registers of the Adjustable Clock.
 ![Drift_ServoI](Additional%20Files/Regset17_DriftServoI.png)
 ![ClkOffset](Additional%20Files/Regset18_ClkOffset.png)
 ![ClkDrift](Additional%20Files/Regset19_ClkDrift.png)
-## 4 Design Description
-The Adjustable Clock supports up to 5 external adjustments, plus a register adjustment, which is provided by the CPU via the AXI slave (REG mode). Each adjustment input can provide a direct time set to the timer clock (TimeAdjustment), or a phase correction (OffsetAdjustment), or a freqeuncy correction (DriftAdjustment). The component provides to the output the timer clock ClockTime and its status flags InSync and InHoldover. Also, the PI servo coefficients which are received by the AXI registers are forwarded to the output.
-The component is divided into 4 main operations:
-- the spreading of the offset and drift adjustements over their interval window 
-- the adjustment of the timer clock by setting the time adjustment or by applying the offset and drift adjustments
-- the reporting of the adjustable clock quality by setting the InSync and InHoldover flags
-- the AXI slave for interfacing the clock adjustments with the CPU  
-### 4.1 Spreading of Offset and Drift Adjustments
-When a time adjustment is applied, the timer clock takes over directly this time (time set).    
-When an offset or drift adjustment is applied, the component takes the adjustment inputs and converts them into periodic small adjustments which are then set to the timer clock. E.g. a drift of 1ns per 1000ns is converted to a 1ns adjustment every 50 clock cycles at a frequency of 50MHz. For offset it works similar. E.g. 50ns shall be corrected in 2000ns which will be converted into 1ns every second clock cycle at 50MHz. If the offset adjustment is too big (more than 1ns per clock cycle needs to be corrected), then the a time set is applied. When the drift adjustment is too big (more than 1ns per clock cycle needs to be corrected), then the drift correction is set to the maximum value (1ns per clock cycle). Finally, the process combines the offset and drift correction to be applied to the timer clock.
-The drift adjustments are always the full drift to applied, not only the delta to the last adjustment.
-### 4.2 Apply corrections to the timer clock
-The timer clock is a time counter that consists of Second and Nanosecond fields. At each system clock cycle, the timer clock either increases by the period of the system clock or applies a correction.
+## 4 Описание архитектуры
+Adjustable Clock поддерживает до 5 внешних корректировок, плюс корректировку из регистров, предоставляемую CPU через AXI slave (режим REG). Каждый вход корректировки может обеспечить прямую установку времени для таймерного счетчика (TimeAdjustment), или фазовую коррекцию (OffsetAdjustment), или частотную коррекцию (DriftAdjustment). Компонент предоставляет на выход таймерный счетчик ClockTime и его флаги состояния InSync и InHoldover. Также коэффициенты PI-сервоконтура, полученные через регистры AXI, передаются на выход.
+Компонент разделен на 4 основных операции:
+- распределение корректировок смещения и дрейфа в течение их интервального окна
+- корректировка таймерного счетчика путем установки корректировки времени или применения корректировок смещения и дрейфа
+- сообщение о качестве регулируемых часов путем установки флагов InSync и InHoldover
+- AXI slave для взаимодействия корректировок часов с CPU
+### 4.1 Распределение корректировок смещения и дрейфа
+При применении корректировки времени таймерный счетчик принимает это время напрямую (установка времени).
+При применении корректировки смещения или дрейфа компонент принимает входы корректировки и преобразует их в периодические малые корректировки, которые затем устанавливаются для таймерного счетчика. Например, дрейф 1 нс на 1000 нс преобразуется в корректировку 1 нс каждые 50 тактов при частоте 50 МГц. Для смещения работает аналогично. Например, необходимо скорректировать 50 нс за 2000 нс, что будет преобразовано в 1 нс каждый второй такт при 50 МГц. Если корректировка смещения слишком велика (требуется корректировать более 1 нс за такт), применяется установка времени. Если корректировка дрейфа слишком велика (требуется корректировать более 1 нс за такт), то коррекция дрейфа устанавливается на максимальное значение (1 нс за такт). Наконец, процесс комбинирует коррекцию смещения и дрейфа для применения к таймерному счетчику.
+Корректировки дрейфа всегда представляют собой полный дрейф для применения, а не только дельту относительно последней корректировки.
+### 4.2 Применение коррекций к таймерному счетчику
+Таймерный счетчик — это счетчик времени, состоящий из полей Секунды и Наносекунды. На каждом такте системноготактового сигнала таймерный счетчик либо увеличивается на период системноготактового сигнала, либо применяется коррекция.
 
-In more detail, at each system clock cycle:  
-- if a time adjustment is active, time set the timer clock
-- if both a positive offset and a positive drift adjustments are active, the timer clock increases by the period of the system clock plus 2ns
-- if both an offset and a positive drift adjustments are active, but they have different signs, the timer clock increases by the period of the system clock ((-1) + 1 = 0; or 1 + (-1) = 0; so no adjustment)
-- if both a negative offset and a negative drift adjustments are active, the timer clock increases by the period of the system clock minus 2ns
-- if only a positive offset or positive drift adjustment is active, the timer clock increases by the period of the system clock plus 1ns
-- if only a negative offset or negative drift adjustment is active, the timer clock increases by the period of the system clock minus 1ns
-- else, the timer clock increases by the period of the system clock
-### 4.3 Adjustable Clock quality flags
-The quality flags of the clock's status InSync and InHoldover are provided to the output.
+Подробнее, на каждом такте системноготактового сигнала:
+- если активна корректировка времени, выполняется установка времени таймерного счетчика
+- если активны обе положительные корректировки смещения и дрейфа, таймерный счетчик увеличивается на период системноготактового сигнала плюс 2 нс
+- если активны обе корректировки смещения и дрейфа, но они имеют разные знаки, таймерный счетчик увеличивается на период системноготактового сигнала ((-1) + 1 = 0; или 1 + (-1) = 0; то есть без коррекции)
+- если активны обе отрицательные корректировки смещения и дрейфа, таймерный счетчик увеличивается на период системноготактового сигнала минус 2 нс
+- если активна только положительная корректировка смещения или положительная корректировка дрейфа, таймерный счетчик увеличивается на период системноготактового сигнала плюс 1 нс
+- если активна только отрицательная корректировка смещения или отрицательная корректировка дрейфа, таймерный счетчик увеличивается на период системноготактового сигнала минус 1 нс
+- в противном случае таймерный счетчик увеличивается на период системноготактового сигнала
+### 4.3 Флаги качества Adjustable Clock
+Флаги качества состояния часов InSync и InHoldover предоставляются на выход.
 
-The InSync flag is
-- activated, if for 4 consecutive offset adjustments the corrections are less than a predefined threshold.
-- deactivated, if a time set is a applied (i.e. a time adjustment is applied or an offset adjustment is too big) or if the clock is disabled.
+Флаг InSync:
+- активируется, если для 4 последовательных корректировок смещения коррекции меньше предопределенного порога.
+- деактивируется, если применяется установка времени (то есть применяется корректировка времени или корректировка смещения слишком велика) или если часы отключены.
 
-The InHoldover flag is
-- activated, if the timer clock has been InSync and an offset adjustment has not been received for a predefined timeout time
-- deactivated, if the timer clock goes out of sync, or if a time or if an offset adjustment is received, or if the clock is disabled
-### 4.4 AXI slave of the adjustable clock 
-The Adjustable CLock includes an AXI Light Memory Mapped Slave. It provides access to all registers and allows to configure the Adjustable Clock. An AXI Master has to configure the Datasets with AXI writes to the registers, which is typically done by a CPU. It also provides a status interface which allows to supervise the status of the clock. [Chapter 3](#3-register-set) has a description of the register set. 
- 
+Флаг InHoldover:
+- активируется, если таймерный счетчик был в состоянии InSync и в течение предопределенного таймаута не была получена корректировка смещения
+- деактивируется, если таймерный счетчик выходит из синхронизации, или если получена корректировка времени или корректировка смещения, или если часы отключены
+### 4.4 AXI slave Adjustable Clock
+Adjustable Clock включает AXI Light Memory Mapped Slave. Он предоставляет доступ ко всем регистрам и позволяет конфигурировать Adjustable Clock. AXI Master должен конфигурировать наборы данных записью в регистры через AXI, что обычно выполняется CPU. Он также предоставляет интерфейс состояния, который позволяет контролировать состояние часов. [Глава 3](#3-register-set) содержит описание набора регистров.

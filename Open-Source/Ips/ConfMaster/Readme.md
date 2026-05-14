@@ -1,88 +1,88 @@
-# Conf Master Design Description
-## Contents
+# Описание архитектуры Conf Master
+## Содержание
 
-[1. Context Overview](#1-context-overview)
+[1. Общий обзор контекста](#1-context-overview)
 
-[2. Interface Description](#2-interface-description)
+[2. Описание интерфейса](#2-interface-description)
 
-[3. Design Description](3-design-description)
+[3. Описание архитектуры](3-design-description)
 
-## 1. Context Overview
-The Conf Master is an FPGA core that provides a configuration to the other FPGA cores. The intention is that a fixed configuration can be provided to the FPGA during startup without the support of the CPU. The fixed configuration is provided via a text file, which is loaded to an FPGA ROM during compilation time.    
-The process of providing the configuration to the FPGA cores is:
-- A configuration text file is created manually, before compiling the FPGA design. It includes commands for accessing the FPGA cores' AXI registers at a predefined format. 
-- The text file is loaded to the FPGA bitstream during compilation time. The the file is converted as load of a ROM as part of the FPGA bitstream.
-- At startup (e.g. when the reset is deactivated), the Conf Master reads the ROM data and accesses the AXI registers of the FPGA cores' correspondingly.   
+## 1. Общий обзор контекста
+Conf Master — это ядро FPGA, которое предоставляет конфигурацию другим ядрам FPGA. Предполагается, что фиксированная конфигурация может быть предоставлена FPGA во время запуска без поддержки CPU. Фиксированная конфигурация предоставляется через текстовый файл, который загружается в ROM FPGA во время компиляции.
+Процесс предоставления конфигурации ядрам FPGA:
+- Текстовый файл конфигурации создается вручную перед компиляцией FPGA design. Он содержит команды для доступа к регистрам AXI ядер FPGA в предопределенном формате.
+- Текстовый файл загружается в bitstream FPGA во время компиляции. Файл преобразуется как загрузка ROM как часть bitstream FPGA.
+- При запуске (например, когда сброс деактивирован), Conf Master считывает данные ROM и соответствующим образом обращается к регистрам AXI ядер FPGA.
 
-## 2. Interface Description
+## 2. Описание интерфейса
 ### 2.1 Conf Master IP
-The interface of the Conf Master is:
-- System Reset and System Clock as inputs
-- An AXI4L master interface, via which the Conf Master accesses the FPGA cores' registers 
-- A sticky flag output that the configuration has been completed
+Интерфейс Conf Master:
+- System Reset и System Clock на входе
+- AXI4L master интерфейс, через который Conf Master обращается к регистрам ядер FPGA
+- Sticky flag на выходе, указывающий, что конфигурация завершена
  
 ![Conf Master IP](Additional%20Files/ConfMasterIP.png) 
 
-The configuration options of the core are:
-- The System Clock period in nanoseconds 
-- The local path of the configuration text file
-- The AXI timeout in system clock cycles. If the register access has not completed when the timeout is reached, the specific access is skipped. If the AXI timeout is '0', then there is no timeout, and the access will wait forever until it is completed.  
+Параметры конфигурации ядра:
+- Период System Clock в наносекундах
+- Локальный путь к текстовому файлу конфигурации
+- Таймаут AXI в тактах системного тактового сигнала. Если доступ к регистру не завершен к моменту достижения таймаута, конкретный доступ пропускается. Если таймаут AXI равен '0', то таймаута нет, и доступ будет ждать вечно до завершения.
 
 ![Conf Master Gui](Additional%20Files/ConfMasterConfiguration.png)
-### 2.2 Configuration text file
-The configuration text file is a generic input to the Conf Master core. The file's path, name and contents are defined before the compilation of the FPGA.
-The format of the configuration file is predefined: 
-- Each line of the text file is a command. 
-- Each line should have 4 fields, as shown in the example below.   
+### 2.2 Текстовый файл конфигурации
+Текстовый файл конфигурации — это общий вход для ядра Conf Master. Путь, имя и содержимое файла определяются перед компиляцией FPGA.
+Формат конфигурационного файла предопределен:
+- Каждая строка текстового файла — это команда.
+- Каждая строка должна содержать 4 поля, как показано в примере ниже.
 
-|Command Type|Base Address|Register Address|Data|
+|Тип команды|Базовый адрес|Адрес регистра|Данные|
 |--------|--------|--------|--------|
 |00000004|01010000|00000008|00000001|
 |00000002|00000000|00000000|40000000|
 
-- A template format of the file can be found at the [Configuration Template](Additional%20Files/ConfigurationTemplate.txt).
-- The 4 fields are 8-digit HEX values seperated by a 'space'character. (no leading "0x", see also [Chapter 3.1](#31-text-file-parsing))
-- Empty lines (starting with 'CR', 'LF', 'NUL', 'HT', or ' ' characters), or commented lines (starting with "--" or "//") are skipped.
-- Invalid lines (e.g. too short or unexpected format) are also skipped.
+- Шаблон формата файла можно найти в [Configuration Template](Additional%20Files/ConfigurationTemplate.txt).
+- 4 поля — это 8-значные HEX значения, разделенные символом 'пробел'. (без префикса "0x", см. также [Глава 3.1](#31-text-file-parsing))
+- Пустые строки (начинающиеся с символов 'CR', 'LF', 'NUL', 'HT' или ' '), или строки-комментарии (начинающиеся с "--" или "//") пропускаются.
+- Некорректные строки (например, слишком короткие или с неожиданным форматом) также пропускаются.
 
-### 2.3 Command structutre 
-The **Command Type** field is described in the table below.
+### 2.3 Структура команд
+Поле **Тип команды** описано в таблице ниже.
 
-|Command Type|Enumeration|Description|
+|Тип команды|Перечисление|Описание|
 |--------|----------|---------------------------|
-|Skip|0x00000001|Skip the specific command|
-|Wait|0x00000002|Wait in nanoseconds before moving on to the next command|
-|Read|0x00000003|Read a specific AXI register|
-|Write|0x00000004|Write a specidic AXI register|
+|Skip|0x00000001|Пропустить конкретную команду|
+|Wait|0x00000002|Ожидать указанное количество наносекунд перед переходом к следующей команде|
+|Read|0x00000003|Считать конкретный AXI регистр|
+|Write|0x00000004|Записать конкретный AXI регистр|
 
-The **Base Address** field is used by the Read and Write commands. As the name indicates, it is the base address of an FPGA core's registers that will be accessed. 
+Поле **Базовый адрес** используется командами Read и Write. Как следует из названия, это базовый адрес регистров ядра FPGA, к которым будет выполняться доступ.
 
-The **Register Address** field is used by the Read and Write commands. As the name indicates, it is the address of the 32-bit register (offset by Base Address).
+Поле **Адрес регистра** используется командами Read и Write. Как следует из названия, это адрес 32-битного регистра (смещение относительно Базового адреса).
 
-The **Data** field is used by the Write and Wait commands. The Write command, writes the Data to the indicated register. The Wait command waits "Data" nanoseconds. 
+Поле **Данные** используется командами Write и Wait. Команда Write записывает Данные в указанный регистр. Команда Wait ожидает "Данные" наносекунд.
 
-## 3 Design Description
-The Conf Master core consists of 2 main parts 
-- accessing the text file and loading it to a ROM (at compile time)
-- AXI4L master for accessing the AXI registers according to the contents of the ROM
+## 3 Описание архитектуры
+Ядро Conf Master состоит из 2 основных частей:
+- доступ к текстовому файлу и загрузка его в ROM (во время компиляции)
+- AXI4L master для доступа к регистрам AXI в соответствии с содержимым ROM
 
-### 3.1 Text file parsing
-The function that accesses the text file (its path is provided as a configuration during compilation time) expects a specific format. The parsing of the file is done line-by-line and completes when the EOF is reached.
-The acceptable format of each text line is:
-- The line starts with a CR, LF, HT, NUL, ' '. The line is skipped.
-- The line starts with comment characters "--" or "//". The line is skipped
-- A line is accepted as a command if:  
-  - the characters 1-9 are an 8-digit HEX value (characters '0'-'9' or 'A'-'F' or 'a'-'f') followed by a space character (' ') (**Command Type**)
-  - the characters 10-18 are an 8-digit HEX value (characters '0'-'9' or 'A'-'F' or 'a'-'f') followed by a space character (' ') (**Base Address**)
-  - the characters 19-27 are an 8-digit HEX value (characters '0'-'9' or 'A'-'F' or 'a'-'f') followed by a space character (' ') (**Register Address**)
-  - the characters 28-35 are an 8-digit HEX value (characters '0'-'9' or 'A'-'F' or 'a'-'f') (**Data**)
-  - additional characters in the line are ignored
-  
-Examples:
-- Do a Write to address 0x01000120 with 0xDEADBEEF
+### 3.1 Разбор текстового файла
+Функция, которая обращается к текстовому файлу (его путь предоставляется как конфигурация во время компиляции), ожидает определенный формат. Разбор файла выполняется построчно и завершается при достижении EOF.
+Допустимый формат каждой текстовой строки:
+- Строка начинается с CR, LF, HT, NUL, ' '. Строка пропускается.
+- Строка начинается с символов комментария "--" или "//". Строка пропускается.
+- Строка принимается как команда, если:
+  - символы 1-9 — это 8-значное HEX значение (символы '0'-'9' или 'A'-'F' или 'a'-'f'), за которым следует символ пробела (' ') (**Тип команды**)
+  - символы 10-18 — это 8-значное HEX значение (символы '0'-'9' или 'A'-'F' или 'a'-'f'), за которым следует символ пробела (' ') (**Базовый адрес**)
+  - символы 19-27 — это 8-значное HEX значение (символы '0'-'9' или 'A'-'F' или 'a'-'f'), за которым следует символ пробела (' ') (**Адрес регистра**)
+  - символы 28-35 — это 8-значное HEX значение (символы '0'-'9' или 'A'-'F' или 'a'-'f') (**Данные**)
+  - дополнительные символы в строке игнорируются
+
+Примеры:
+- Выполнить запись по адресу 0x01000120 со значением 0xDEADBEEF
   - 00000004 01000000 00000120 DEADBEEF
-- Wait for a second (3B9ACA00 = 1000000000)
+- Ожидать одну секунду (3B9ACA00 = 1000000000)
   - 00000002 00000000 00000000 3B9ACA00
 
- ### 3.2 AXI master 
-The Conf Master should be able to access the AXI registers of other FPGA cores. Therefore, the AXI master can read and write 32-bit registers. A deviation from the AXI4L spec is the following: if the AXI timeout is reached and the access is not yet completed (e.g. the AXI slave has not responded yet), then the access is skipped, instead of blocking the bus forever. 
+ ### 3.2 AXI master
+Conf Master должен иметь возможность обращаться к регистрам AXI других ядер FPGA. Поэтому AXI master может считывать и записывать 32-битные регистры. Отклонение от спецификации AXI4L следующее: если достигнут таймаут AXI и доступ еще не завершен (например, AXI slave еще не ответил), то доступ пропускается вместо блокировки шины навсегда.

@@ -1,34 +1,34 @@
-# FPGA Version Design Description
-## Contents
+# Описание архитектуры FPGA Version
+## Содержание
 
-[1. Context Overview](#1-context-overview)
+[1. Общий обзор контекста](#1-context-overview)
 
-[2. Interface Description](#2-interface-description)
+[2. Описание интерфейса](#2-interface-description)
 
-[3. Register Set](#3-register-set)
+[3. Набор регистров](#3-register-set)
 
 
-## 1. Context Overview
-The FPGA Version core is a 32-bit register accessible by an AXI4-Lite interface.
-The register consists of 2 parts:
-- the FPGA version, which occupies the 2 last bytes (LSB) of the register
-- the FPGA Golden version, which occupies the 2 last bytes (LSB) of the register
-An input selects which of the 2 versions is provided to the AXI interface. 
+## 1. Общий обзор контекста
+Ядро FPGA Version — это 32-битный регистр, доступный через AXI4-Lite интерфейс.
+Регистр состоит из 2 частей:
+- версия FPGA, которая занимает 2 младших байта (LSB) регистра
+- FPGA Golden version, которая занимает 2 младших байта (LSB) регистра
+Вход выбирает, какая из 2 версий предоставляется на AXI интерфейс.
 
-## 2. Interface Description
+## 2. Описание интерфейса
 
-The interface of the Core List is:
-- System Reset and System Clock as inputs
-- An AXI4L slave interface, via which the CPU reads the FPGA version information
-- An input that selects which of the 2 versions is provide to the AXI interface
+Интерфейс Core List:
+- System Reset и System Clock на входе
+- AXI4L slave интерфейс, через который CPU считывает информацию о версии FPGA
+- Вход, который выбирает, какая из 2 версий предоставляется на AXI интерфейс
  
 ![FPGA Version IP](Additional%20Files/FpgaVersion_IP.png) 
 
-The configuration options of the core are the FPGA and GOlden FPGA versions
+Параметры конфигурации ядра — это версии FPGA и Golden FPGA
 
 ![FPGA Version Config](Additional%20Files/FpgaVersion_Config.png)
 
-## 3. Register Set
-The CPU receives the versions by AXI accessing the memory-mapped register of the FPGA Version core.
+## 3. Набор регистров
+CPU получает версии путем доступа к регистру с отображением в памяти ядра FPGA Version.
 ![FPGA Version Regset](Additional%20Files/FpgaVersion_Regset.png)
 

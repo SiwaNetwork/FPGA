@@ -1,20 +1,20 @@
-# SMA Selector Design Description
-## Contents
+# Описание проекта SMA Selector
+## Содержание
 
-[1. Context Overview](#1-context-overview)
+[1. Обзор контекста](#1-обзор-контекста)
 
-[2. Interface Description](#2-interface-description)
+[2. Описание интерфейса](#2-описание-интерфейса)
 
-[3. Register Set](#3-register-set)
+[3. Набор регистров](#3-набор-регистров)
 
-[4. Design Description](#4-design-description)
+[4. Описание проекта](#4-описание-проекта)
 
-## 1. Context Overview
-The SMA Selector is a full hardware (FPGA) only implementation that multiplexes the outputs and demultiplexes the inputs 
-of the 4 SMA connectors of the [Timecard](https://github.com/opencomputeproject/Time-Appliance-Project/tree/master/Time-Card).
-Each connector can be configured as input or output, depending on the configured mapping.
-The following signals can be sourced by an SMA input:
-- 10MHz Clock (only from SMA 1)
+## 1. Обзор контекста
+SMA Selector — это полностью аппаратная (только FPGA) реализация, которая мультиплексирует выходы и демультиплексирует входы 
+4 разъёмов SMA [Timecard](https://github.com/opencomputeproject/Time-Appliance-Project/tree/master/Time-Card).
+Каждый разъём может быть сконфигурирован как вход или выход в зависимости от настроенного отображения.
+Следующие сигналы могут поступать с входа SMA:
+- 10MHz Clock (только от SMA 1)
 - External PPS 1
 - External PPS 2
 - Source to Signal Timestamper 1
@@ -29,12 +29,12 @@ The following signals can be sourced by an SMA input:
 - DCF Slave (unused)
 - External UART Rx
 
-The following signals can be mapped to an SMA outputs:
+Следующие сигналы могут быть отображены на выход SMA:
 - 10MHz pulse
-- PPS of the FPGA
-- PPS of the MAC
-- PPS of the GNSS 1
-- PPS of the GNSS 2
+- PPS FPGA
+- PPS MAC
+- PPS GNSS 1
+- PPS GNSS 2
 - IRIG Master (unused)
 - DCF Master (unused)
 - Signal Generator 1
@@ -45,75 +45,75 @@ The following signals can be mapped to an SMA outputs:
 - GNSS 2 UART Messages
 - External UART Tx
 
-The possible mappings of the directions of the SMA data are:
-|Connector|Selection 1|Selection 2|
+Возможные отображения направлений данных SMA:
+|Разъём|Выбор 1|Выбор 2|
 |-----|---------|---------|
 |SMA 1|Input|Output|
 |SMA 2|Input|Output|
 |SMA 3|Output|Input|
 |SMA 4|Output|Input|
 
-The configured mapping is done via 2 AXI4L slave interfaces, named AXI1 and AXI2. Each slave interface controls one mapping option.
+Настроенное отображение выполняется через 2 интерфейса slave AXI4L, названных AXI1 и AXI2. Каждый интерфейс slave управляет одним вариантом отображения.
 
-## 2. Interface Description
-### 2.1 SMA Selector IP
-The interface of the SMA Selector  is:
-- System Reset and System Clock as inputs
-- The SMA output sources, as core inputs
-- The SMA input sources, as core outputs 
-- An SMA signal for each SMA connector, as input, in case the connector is configured as input
-- An SMA signal for each SMA connector, as output, in case the connector is configured as output   
-- Enabling signals of input and output for each SMA connector, as outputs
-- An AXI4L slave interface, for configuration mapping 1 (AXI1)
-- An AXI4L slave interface, for configuration mapping 2 (AXI2)
+## 2. Описание интерфейса
+### 2.1 IP SMA Selector
+Интерфейс SMA Selector:
+- System Reset и System Clock на вход
+- Источники выхода SMA на вход ядра
+- Источники входа SMA на выход ядра 
+- Сигнал SMA для каждого разъёма SMA на вход, в случае если разъём сконфигурирован как вход
+- Сигнал SMA для каждого разъёма SMA на выход, в случае если разъём сконфигурирован как выход   
+- Сигналы разрешения входа и выхода для каждого разъёма SMA на выход
+- Интерфейс slave AXI4L для конфигурации отображения 1 (AXI1)
+- Интерфейс slave AXI4L для конфигурации отображения 2 (AXI2)
  
 ![SMA Selector IP](Additional%20Files/SmaSelectorIP.png) 
 
-The core has the following configuration options. 
+Ядро имеет следующие параметры конфигурации. 
 
 ![SMA Selector CONFIG](Additional%20Files/SmaSelectorConfig.png) 
  
-## 3. Register Set
-The SMA Selector has two register sets, one for each mapping configuration. Each mapping configuration is accessible via AXI4 Light Memory Mapped. 
-All registers are 32bit wide, no burst access, no unaligned access, no byte enables, no timeouts are supported. 
-Register address space is not contiguous. Register addresses are only offsets in the memory area where the core is mapped in the AXI inter connects. 
-Non existing register access in the mapped memory area is answered with a slave decoding error.
-### 3.1 Register Set 1
-The Register set 1 configures mapping 1. In mapping 1, SMA 1 and SMA 2 are inputs, while SMA 3 and SMA 4 are outputs. 
+## 3. Набор регистров
+SMA Selector имеет два набора регистров, по одному для каждой конфигурации отображения. Каждая конфигурация отображения доступна через AXI4 Light Memory Mapped. 
+Все регистры 32-битные, не поддерживаются пакетный доступ, невыровненный доступ, byte enables, таймауты. 
+Адресное пространство регистров не непрерывно. Адреса регистров — это только смещения в области памяти, где ядро отображено в AXI interconnect. 
+Обращение к несуществующему регистру в отображённой области памяти возвращает ошибку декодирования slave.
+### 3.1 Набор регистров 1
+Набор регистров 1 конфигурирует отображение 1. В отображении 1 SMA 1 и SMA 2 являются входами, а SMA 3 и SMA 4 — выходами. 
 
-Additionally, the Register Set 1 provides the status of the 4 SMA inputs.
+Кроме того, Набор регистров 1 предоставляет статус 4 входов SMA.
 
-#### 3.1.1 Register Set 1 Overview 
-The Register Set 1 overview is shown in the table below. 
+#### 3.1.1 Обзор набора регистров 1 
+Обзор набора регистров 1 показан в таблице ниже. 
 ![RegisterSet1](Additional%20Files/Regset1_Overview.png)
-#### 3.1.2 Register Decription
-The tables below describe the registers of the SMA Selector's mapping 1. 
+#### 3.1.2 Описание регистров
+Таблицы ниже описывают регистры отображения 1 SMA Selector. 
 ![InputSel1](Additional%20Files/Regset1_1_InputSel.png)
 ![OutputSel1](Additional%20Files/Regset1_2_OutputSel.png)
 ![Version1](Additional%20Files/Regset1_3_Version.png)
 ![InputStatus](Additional%20Files/Regset1_4_InputStatus.png)
-### 3.2 Register Set 2
-The Register set 2 configures mapping 2. In mapping 2, SMA 1 and SMA 2 are outputs, while SMA 3 and SMA 4 are inputs. 
-#### 3.2.1 Register Set 2 Overview 
-The Register Set 2 overview is shown in the table below. 
+### 3.2 Набор регистров 2
+Набор регистров 2 конфигурирует отображение 2. В отображении 2 SMA 1 и SMA 2 являются выходами, а SMA 3 и SMA 4 — входами. 
+#### 3.2.1 Обзор набора регистров 2 
+Обзор набора регистров 2 показан в таблице ниже. 
 ![RegisterSet2](Additional%20Files/Regset2_Overview.png)
-#### 3.2.2 Register Decription
-The tables below describe the registers of the SMA Selector's mapping 2. The version is identical for mapping 1 and 2 (**should i remove version for mapping2?**)     
+#### 3.2.2 Описание регистров
+Таблицы ниже описывают регистры отображения 2 SMA Selector. Версия идентична для отображений 1 и 2 (**should i remove version for mapping2?**)     
 ![InputSel2](Additional%20Files/Regset2_1_InputSel.png)
 ![OutputSel2](Additional%20Files/Regset2_2_OutputSel.png)
 ![Version2](Additional%20Files/Regset2_3_Version.png)
 
-## 4 Design Description
-The SMA Selector multiplexes the input and output options, according to the configuration mappings. 
-The core contains 2 AXI4Lite slaves for configuration and status supervision from a CPU. 
+## 4 Описание проекта
+SMA Selector мультиплексирует входные и выходные опции в соответствии с конфигурациями отображения. 
+Ядро содержит 2 интерфейса slave AXI4Lite для конфигурации и контроля статуса со стороны CPU. 
 
-The component consists of 2 main operations:
-- Map the SMA inputs and outputs     
-- Interface with the CPU (AXI master) via the 2 AXI slaves
-### 4.1 Map the SMA inputs and outputs
+Компонент состоит из 2 основных операций:
+- Отображение входов и выходов SMA     
+- Интерфейс с CPU (AXI master) через 2 интерфейса slave AXI
+### 4.1 Отображение входов и выходов SMA
 
-There are 4 possible SMA Input Source Select signals received from configuration (see [Chapter 3](#3-register-set)). Each of them defines the usage of the corresponding SMA input. **The usage of an SMA Input X, where X=1,2,3,4, is mapped in the following way:**  
-|SMA Input X is source to |Bit 0|Bit 1|Bit 2|Bit 3|Bit 4|Bit 5|Bit 6|Bit 7|Bit 8|Bit 9|Bit 10|Bit 11|Bit 12|Bit 13|Bit 14|Bit 15|
+Существует 4 возможных сигнала выбора источника входа SMA, полученных из конфигурации (см. [Главу 3](#3-register-set)). Каждый из них определяет использование соответствующего входа SMA. **Использование входа SMA X, где X=1,2,3,4, отображается следующим образом:**  
+|SMA Input X является источником для |Bit 0|Bit 1|Bit 2|Bit 3|Bit 4|Bit 5|Bit 6|Bit 7|Bit 8|Bit 9|Bit 10|Bit 11|Bit 12|Bit 13|Bit 14|Bit 15|
 |-------------------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:----:|:----:|:----:|:----:|:----:|:----:|
 |Ext PPS 1|1|
 |Ext PPS 2||1|
@@ -131,12 +131,12 @@ There are 4 possible SMA Input Source Select signals received from configuration
 |10 MHz enable*|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
 |Enable SMA Input X||||||||||||||||1|
 
-*Note: The 10 MHz pulse is supported only via the SMA input 1 and it is enabled if the SMA Select Source Input 1 is not mapped to any other selection. 
-*Note 2: An SMA input can be the source to multiple destinations.   
+*Примечание: Импульс 10 МГц поддерживается только через вход SMA 1 и включается, если источник выбора входа SMA 1 не отображён ни на какой другой выбор. 
+*Примечание 2: Вход SMA может быть источником для нескольких назначений.   
  
-There are 4 possible SMA Output Source Select signals received from configuration (see [Chapter 3](#3-register-set)). Each of them defines what should be sent to the corresponding SMA output. **The connection of an SMA Output X, where X=1,2,3,4, is mapped in the following way**  
+Существует 4 возможных сигнала выбора источника выхода SMA, полученных из конфигурации (см. [Главу 3](#3-register-set)). Каждый из них определяет, что должно быть отправлено на соответствующий выход SMA. **Подключение выхода SMA X, где X=1,2,3,4, отображается следующим образом**  
 
-|SMA Output X is sourced from|Bit 0|Bit 1|Bit 2|Bit 3|Bit 4|Bit 5|Bit 6|Bit 7|Bit 8|Bit 9|Bit 10|Bit 11|Bit 12|Bit 13|Bit 14|Bit 15|
+|SMA Output X получает сигнал от|Bit 0|Bit 1|Bit 2|Bit 3|Bit 4|Bit 5|Bit 6|Bit 7|Bit 8|Bit 9|Bit 10|Bit 11|Bit 12|Bit 13|Bit 14|Bit 15|
 |-------------------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 |FPGA PPS|1|
 |MAC PPS||1|
@@ -155,6 +155,6 @@ There are 4 possible SMA Output Source Select signals received from configuratio
 |VCC|||||||||||||||1|
 |10 MHz pulse|0|0|0|0|0|0|0|0|0|0|0|0|0|0|0|
 |Enable SMA Output X||||||||||||||||1|
-### 4.2 AXI slave of the SMA Selector 
-The SMA Selector includes 2 AXI Light Memory Mapped Slaves. Each slave provides access to the registers of a mapping and allows to configure the core. 
-An AXI Master has to configure the Datasets with AXI writes to the registers, which is typically done by a CPU. [Chapter 3](#3-register-set) has a complete description of the register set.
+### 4.2 AXI slave SMA Selector 
+SMA Selector включает 2 интерфейса slave AXI Light Memory Mapped. Каждый интерфейс slave предоставляет доступ к регистрам отображения и позволяет конфигурировать ядро. 
+AXI Master должен конфигурировать наборы данных записью AXI в регистры, что обычно выполняется CPU. Полное описание набора регистров приведено в [Главе 3](#3-register-set).
