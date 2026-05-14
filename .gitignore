@@ -1,0 +1,44 @@
+# Vivado generated project files
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.srcs/
+*.gen/
+*.xpr
+*.xsa
+*.hdf
+*.bit
+*.bin
+*.prm
+*.dcp
+*.jou
+*.log
+*.pb
+*.wdf
+*.xml
+Xilinx/TimeCard/TimeCard/
+Xilinx/TimeCard_Production/TimeCard/
+Xilinx/TimeCard_200T/TimeCard/
+Xilinx/TimeCard_LitePcie/TimeCard/
+
+# Vivado implementation artifacts
+synth_1/
+impl_1/
+*.tcl~*
+
+# OS files
+.DS_Store
+Thumbs.db
+*.tmp
+*~
+
+# IDE
+.vscode/
+.idea/
+
+# Simulation artifacts
+xsim.dir/
+*.vcd
+*.wdb
