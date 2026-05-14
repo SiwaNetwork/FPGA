@@ -1,37 +1,37 @@
 # FPGA Open Source Time Card
 
-This repository contains the FPGA design for the [Open Source Time Card](https://github.com/opencomputeproject/Time-Appliance-Project/tree/master/Time-Card) from the Open Compute Project.
+Этот репозиторий содержит FPGA-проект для [Open Source Time Card](https://github.com/opencomputeproject/Time-Appliance-Project/tree/master/Time-Card) из Open Compute Project.
 
-## Overview
+## Обзор
 
-The Time Card is a PCI Express card for precise time synchronization. It supports:
-- **GNSS receivers** (up to 2 modules) for UTC/time-of-day reception
-- **PPS (Pulse Per Second)** input/output via SMA connectors
-- **High-precision timestamping** of external events
-- **Signal generation** (PWM) aligned to the local clock
-- **PCIe Gen2** host interface
-- **Field-updatable FPGA firmware** with fallback/golden image support
+Time Card — это плата PCI Express для точной синхронизации времени. Она поддерживает:
+- **GNSS-приёмники** (до 2 модулей) для приёма UTC/времени суток
+- **PPS (Pulse Per Second)** вход/выход через разъёмы SMA
+- **Высокоточное нанесение меток времени** внешних событий
+- **Генерацию сигналов** (PWM), выровненную с локальными часами
+- **PCIe Gen2** интерфейс хоста
+- **Обновляемую в поле FPGA-прошивку** с поддержкой резервного/golden образа
 
-## Target Hardware
+## Целевое оборудование
 
-| Variant | FPGA | Notes |
+| Вариант | FPGA | Примечания |
 |---------|------|-------|
-| TimeCard (Base) | Xilinx Artix-7 XC7A100T | Standard open-source variant |
-| TimeCard_200T | Xilinx Artix-7 XC7A200T | Larger FPGA variant |
-| TimeCard_LitePcie | Xilinx Artix-7 | LitePCIe-based implementation |
-| TimeCard_Production | Xilinx Artix-7 | Production-optimized variant |
+| TimeCard (Base) | Xilinx Artix-7 XC7A100T | Стандартный open-source вариант |
+| TimeCard_200T | Xilinx Artix-7 XC7A200T | Вариант с большей FPGA |
+| TimeCard_LitePcie | Xilinx Artix-7 | Реализация на базе LitePCIe |
+| TimeCard_Production | Xilinx Artix-7 | Производственный оптимизированный вариант |
 
-## Project Structure
+## Структура проекта
 
 ```
 Open-Source/
-├── Implementation/     # Vendor-specific implementations
+├── Implementation/     # Реализации для конкретных производителей
 │   └── Xilinx/
-│       ├── TimeCard/           # Base design (Vivado 2019.1)
-│       ├── TimeCard_200T/      # 200T variant
-│       ├── TimeCard_LitePcie/  # LitePCIe variant
-│       └── TimeCard_Production/# Production variant
-├── Ips/                # Custom open-source IP cores
+│       ├── TimeCard/           # Базовый проект (Vivado 2019.1)
+│       ├── TimeCard_200T/      # Вариант 200T
+│       ├── TimeCard_LitePcie/  # Вариант LitePCIe
+│       └── TimeCard_Production/# Производственный вариант
+├── Ips/                # Пользовательские открытые IP-ядра
 │   ├── AdjustableClock
 │   ├── ClockDetector
 │   ├── ConfMaster
@@ -42,45 +42,45 @@ Open-Source/
 │   ├── SignalGenerator
 │   ├── SmaSelector
 │   ├── TodSlave
-│   └── ... (see Ips/ for full list)
-├── Modules/            # Reusable VHDL modules
+│   └── ... (полный список см. в Ips/)
+├── Modules/            # Переиспользуемые VHDL-модули
 │   ├── BufgMux
 │   └── Irq
-└── Package/            # Shared constants and procedures
+└── Package/            # Общие константы и процедуры
     └── TimeCard_Package.vhd
 ```
 
-## Building the Project
+## Сборка проекта
 
-### Prerequisites
-- Xilinx Vivado 2019.1 (or compatible)
+### Предварительные требования
+- Xilinx Vivado 2019.1 (или совместимый)
 
-### Steps
-1. Open Vivado and run the TCL console:
+### Шаги
+1. Откройте Vivado и запустите TCL-консоль:
    ```tcl
    source /[YOUR_PATH]/Open-Source/Implementation/Xilinx/TimeCard/CreateProject.tcl
    ```
-2. Generate bitstreams:
+2. Сгенерируйте bitstream:
    ```tcl
    source /[YOUR_PATH]/Open-Source/Implementation/Xilinx/TimeCard/CreateBinariesAll.tcl
    ```
 
-Generated binaries will be placed in the `Binaries/` folder.
+Сгенерированные бинарные файлы будут помещены в папку `Binaries/`.
 
-### Build Outputs
-- `Factory_TimeCardOS.bin` — Combined golden + regular image (for initial flash)
-- `Golden_TimeCardOS.bin` — Fallback/golden image
-- `TimeCardOS.bin` — Regular operational image
-- `TimeCardOS_Gotham.bin` — Regular image with PCIe ID header
+### Результаты сборки
+- `Factory_TimeCardOS.bin` — Комбинированный golden + обычный образ (для начальной прошивки)
+- `Golden_TimeCardOS.bin` — Резервный/golden образ
+- `TimeCardOS.bin` — Обычный рабочий образ
+- `TimeCardOS_Gotham.bin` — Обычный образ с заголовком PCIe ID
 
-## Documentation
+## Документация
 
-- [Project Structure](Open-Source/README.md) (Russian)
-- [Implementation Guide](Open-Source/Implementation/Xilinx/TimeCard/Readme.md)
-- Individual IP core documentation is located in each `Ips/<CoreName>/` folder.
+- [Структура проекта](Open-Source/README.md) (русский)
+- [Руководство по реализации](Open-Source/Implementation/Xilinx/TimeCard/Readme.md)
+- Документация по отдельным IP-ядрам находится в каждой папке `Ips/<CoreName>/`.
 
-## License
+## Лицензия
 
-This project is licensed under the **GNU Lesser General Public License v3** (LGPL v3).
+Этот проект распространяется под лицензией **GNU Lesser General Public License v3** (LGPL v3).
 
 Copyright (c) 2022, NetTimeLogic GmbH, Switzerland.
