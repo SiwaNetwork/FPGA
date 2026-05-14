@@ -543,7 +543,7 @@ begin
         if (Mhz50RstN_Rst = '0') then
             BlinkingLed_DatReg <= '0';
             BlinkingLedCount_CntReg <= 0;
-        elsif ((Mhz50Clk_Clk'event) and (Mhz50Clk_Clk = '1')) then
+        elsif rising_edge(Mhz50Clk_Clk) then
             if (BlinkingLedCount_CntReg < 250000000) then
                 BlinkingLedCount_CntReg <= BlinkingLedCount_CntReg + ClkPeriodNanosecond_Con;
             else
@@ -558,7 +558,7 @@ begin
         if (Mhz62_5RstN_Rst = '0') then
             BlinkingLed2_DatReg <= '0';
             BlinkingLed2Count_CntReg <= 0;
-        elsif ((Mhz62_5Clk_Clk'event) and (Mhz62_5Clk_Clk = '1')) then
+        elsif rising_edge(Mhz62_5Clk_Clk) then
             if (BlinkingLed2Count_CntReg < 200000000) then
                 BlinkingLed2Count_CntReg <= BlinkingLed2Count_CntReg + ClkPeriodNanosecond_Con;
             else
@@ -574,7 +574,7 @@ begin
             BnoRstN_Rst <= '1';
             GnssDataOe_EnaReg <= '0';
             RstCount_CntReg <= 0;
-        elsif ((Mhz50Clk_Clk'event) and (Mhz50Clk_Clk = '1')) then
+        elsif rising_edge(Mhz50Clk_Clk) then
             if (RstCount_CntReg < 2000000000) then
                 RstCount_CntReg <= RstCount_CntReg + ClkPeriodNanosecond_Con;
                 if (RstCount_CntReg < 100000) then        -- 100 us

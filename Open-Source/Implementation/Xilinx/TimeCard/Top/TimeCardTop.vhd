@@ -424,7 +424,7 @@ begin
         if (Mhz50RstN_Rst = '0') then
             BlinkingLed_DatReg <= '0';
             BlinkingLedCount_CntReg <= 0;
-        elsif ((Mhz50Clk_Clk'event) and (Mhz50Clk_Clk = '1')) then
+        elsif rising_edge(Mhz50Clk_Clk) then
             if (BlinkingLedCount_CntReg < 250000000) then
                 BlinkingLedCount_CntReg <= BlinkingLedCount_CntReg + ClkPeriodNanosecond_Con;
             else
@@ -439,7 +439,7 @@ begin
         if (Mhz62_5RstN_Rst = '0') then
             BlinkingLed2_DatReg <= '0';
             BlinkingLed2Count_CntReg <= 0;
-        elsif ((Mhz62_5Clk_Clk'event) and (Mhz62_5Clk_Clk = '1')) then
+        elsif rising_edge(Mhz62_5Clk_Clk) then
             if (BlinkingLed2Count_CntReg < 200000000) then
                 BlinkingLed2Count_CntReg <= BlinkingLed2Count_CntReg + ClkPeriodNanosecond_Con;
             else
@@ -454,7 +454,7 @@ begin
         if (Mhz50RstN_Rst = '0') then
             GnssDataOe_EnaReg <= '0';
             RstCount_CntReg <= 0;
-        elsif ((Mhz50Clk_Clk'event) and (Mhz50Clk_Clk = '1')) then
+        elsif rising_edge(Mhz50Clk_Clk) then
             if (RstCount_CntReg < 2000000000) then
                 RstCount_CntReg <= RstCount_CntReg + ClkPeriodNanosecond_Con;
                 if (RstCount_CntReg < 1000000000) then -- 1000ms
@@ -476,12 +476,6 @@ begin
     MacPps0_EvtOut <= MacPps0_Evt;
     MacPps1_EvtOut <= MacPps1_Evt;
     
-    -- MacUsb_Inst: component Obufds 
-    -- port map(
-        -- o                           => MacUsbP_DatOut,
-        -- ob                          => MacUsbN_DatOut,
-        -- i                           => '0'
-    -- );
     MacUsbP_DatOut <= '0';
     MacUsbN_DatOut <= '0';
        
@@ -502,14 +496,6 @@ begin
         o                               => Mhz10ClkDcxo1_Clk
     );   
    
-    -- BufrDcxo2_Inst : Bufr   
-    -- port map (
-        -- ce                              => '1',
-        -- clr                             => '0',
-        -- i                               => Mhz10ClkDcxo2_ClkIn,
-        -- o                               => Mhz10ClkDcxo2_Clk
-    -- );      
-
     Bd_Inst: component TimeCard_wrapper
     port map (
         Mhz200Clk_ClkIn_clk_n       => Mhz200ClkN_ClkIn,
