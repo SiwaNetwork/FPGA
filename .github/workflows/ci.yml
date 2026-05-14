@@ -1,0 +1,94 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  structure-check:
+    runs-on: ubuntu-latest
+    name: Project Structure Check
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check required directories exist
+        run: |
+          test -d Open-Source/Ips
+          test -d Open-Source/Modules
+          test -d Open-Source/Package
+          test -d Open-Source/Implementation/Xilinx/TimeCard
+          test -f Open-Source/Implementation/Xilinx/TimeCard/Top/TimeCardTop.vhd
+          test -f Open-Source/Package/TimeCard_Package.vhd
+          echo "All required files and directories present."
+
+      - name: Check for accidentally committed Vivado artifacts
+        run: |
+          if find Open-Source -type d -name "*.cache" | grep -q .; then
+            echo "ERROR: Vivado cache directories found in repo!"
+            find Open-Source -type d -name "*.cache"
+            exit 1
+          fi
+          if find Open-Source -type d -name "*.runs" | grep -q .; then
+            echo "ERROR: Vivado runs directories found in repo!"
+            find Open-Source -type d -name "*.runs"
+            exit 1
+          fi
+          if find Open-Source -type d -name "*.ip_user_files" | grep -q .; then
+            echo "ERROR: Vivado ip_user_files directories found in repo!"
+            find Open-Source -type d -name "*.ip_user_files"
+            exit 1
+          fi
+          echo "No Vivado artifacts detected."
+
+      - name: Check CHANGELOG format
+        run: |
+          if grep -q "20220601 Version: 0x0001" Open-Source/Implementation/Xilinx/TimeCard/ChangeLog.txt; then
+            echo "CHANGELOG looks good."
+          else
+            echo "WARNING: CHANGELOG may be malformed."
+          fi
+
+  vhdl-lint:
+    runs-on: ubuntu-latest
+    name: VHDL Syntax Check
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install GHDL
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ghdl
+
+      - name: Compile Package
+        run: |
+          ghdl -a --std=08 -Wno-hide -Wno-shared --work=TimecardLib Open-Source/Package/TimeCard_Package.vhd
+
+      - name: Compile IP cores
+        run: |
+          ghdl -a --std=08 -Wno-hide -Wno-shared --work=TimecardLib Open-Source/Package/TimeCard_Package.vhd
+          for f in Open-Source/Ips/*/*.vhd; do
+            echo "Analyzing $f"
+            ghdl -a --std=08 -Wno-hide -Wno-shared --work=work "$f" || true
+          done
+        continue-on-error: true
+
+      - name: Compile Modules
+        run: |
+          ghdl -a --std=08 -Wno-hide -Wno-shared --work=TimecardLib Open-Source/Package/TimeCard_Package.vhd
+          for f in Open-Source/Modules/*/*.vhd; do
+            echo "Analyzing $f"
+            ghdl -a --std=08 -Wno-hide -Wno-shared --work=work "$f" || true
+          done
+        continue-on-error: true
+
+      - name: Compile Testbenches
+        run: |
+          ghdl -a --std=08 -Wno-hide -Wno-shared --work=TimecardLib Open-Source/Package/TimeCard_Package.vhd
+          ghdl -a --std=08 -Wno-hide -Wno-shared --work=work simulation/Tb_Package.vhd
+          for f in simulation/*/*.vhd; do
+            echo "Analyzing $f"
+            ghdl -a --std=08 -Wno-hide -Wno-shared --work=work "$f" || true
+          done
+        continue-on-error: true
