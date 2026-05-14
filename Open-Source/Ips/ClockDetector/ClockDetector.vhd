@@ -234,7 +234,7 @@ begin
     ClockCounter_Gen : for i in 0 to NumberOfClocks_Con-1 generate
         Counter_Prc : process(MhzXClk_ClkIn(i)) is
         begin
-            if ((MhzXClk_ClkIn(i)'event) and (MhzXClk_ClkIn(i) = '1')) then
+            if rising_edge(MhzXClk_ClkIn(i)) then
                 ClockCounter_DatReg(i) <= ClockCounter_DatReg(i) + 1;
             end if;
         end process Counter_Prc;
@@ -249,7 +249,7 @@ begin
                 MhzSlowClk_Clk_FFF(i) <= '0';
                 ClockAliveTimeOut_DatReg(i) <= 0;
                 ClockAvailable_Dat(i) <= '0';
-            elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+            elsif rising_edge(SysClk_ClkIn) then
                 MhzSlowClk_Clk_FF(i) <= MhzSlowClk_Clk(i);
                 MhzSlowClk_Clk_FFF(i) <= MhzSlowClk_Clk_FF(i);
 
@@ -278,7 +278,7 @@ begin
             ClockRst_ShiftReg <= (others => '0');
 
             ClockSelection_StateStReg <= Idle_St;
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             ClkSelected_DatReg <= ClkSelected_Dat;
             --Reset after new selection
             if(ClkSelected_DatReg /= ClkSelected_Dat) then
@@ -355,7 +355,7 @@ begin
             Axi_Init_Proc(ClkDetSourceSelect_Reg_Con, ClkDetSourceSelect_DatReg);
             Axi_Init_Proc(ClkDetVersion_Reg_Con, ClkDetVersion_DatReg);
 
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             if ((AxiWriteAddrValid_ValIn = '1') and (AxiWriteAddrReady_RdyReg = '1')) then
                 AxiWriteAddrReady_RdyReg <= '0';
             end if;

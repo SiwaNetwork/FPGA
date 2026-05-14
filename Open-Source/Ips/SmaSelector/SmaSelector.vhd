@@ -469,7 +469,7 @@ begin
     begin
         if (SysRstN_RstIn = '0') then
             Sma10MHzSourceEnable_EnReg <= '0';
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             -- Clock only supported via Sma Input 0 and must be enabled
             if (unsigned(SmaInput1SourceSelect_DatReg(14 downto 0)) = 0) then
                 Sma10MHzSourceEnable_EnReg <= '1';
@@ -510,7 +510,7 @@ begin
             SmaOutput4SourceSelect_DatReg <= (others => '0');
             SmaInputStatus_DatReg <= (others=>'0');
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             if ((Axi1WriteAddrValid_ValIn = '1') and (Axi1WriteAddrReady_RdyReg = '1')) then
                 Axi1WriteAddrReady_RdyReg <= '0';
             end if;
@@ -616,7 +616,7 @@ begin
             SmaInput4SourceSelect_DatReg <= (others => '0');
             SmaOutput1SourceSelect_DatReg <= (others => '0');
             SmaOutput2SourceSelect_DatReg <= (others => '0');
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             if ((Axi2WriteAddrValid_ValIn = '1') and (Axi2WriteAddrReady_RdyReg = '1')) then
                 Axi2WriteAddrReady_RdyReg <= '0';
             end if;

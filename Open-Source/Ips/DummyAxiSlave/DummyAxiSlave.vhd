@@ -180,7 +180,7 @@ begin
             RamAddress_AdrReg <= (others => '0');
             RamState_StaReg <= RamWait_St;
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
 
             if ((AxiWriteAddrValid_ValIn = '1') and (AxiWriteAddrReady_RdyReg = '1')) then
                 AxiWriteAddrReady_RdyReg <= '0';
@@ -266,7 +266,7 @@ begin
     -- Separate the process to infer a block ram implementation of the memory
     Ram_Prc : process(SysClk_ClkIn) is
     begin
-        if ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        if rising_edge(SysClk_ClkIn) then
             if (RamWriteEn_EnaReg = '1') then
                 Memory_Ram(to_integer(unsigned(RamAddress_AdrReg))) <= RamWrite_DatReg;
             end if;

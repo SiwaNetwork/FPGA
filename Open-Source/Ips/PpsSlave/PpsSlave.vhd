@@ -368,7 +368,7 @@ begin
     -- Mark an input event at the shift register of the high resolution clock domain
     SysClkNxReg_Prc : process(SysClkNx_ClkIn) is
     begin
-        if ((SysClkNx_ClkIn'event) and (SysClkNx_ClkIn = '1')) then 
+        if rising_edge(SysClkNx_ClkIn) then 
             TimestampSysClkNx1_EvtReg <= Timestamper_Evt;
             TimestampSysClkNx2_EvtReg <= TimestampSysClkNx1_EvtReg;
             TimestampSysClkNx_EvtShiftReg <= TimestampSysClkNx_EvtShiftReg((HighResFreqMultiply_Gen*2-2) downto 0) & TimestampSysClkNx2_EvtReg;
@@ -378,7 +378,7 @@ begin
     -- Copy the event shift register of the high resolution clock domain to the system clock domain
     SysClkReg_Prc : process(SysClk_ClkIn) is
     begin
-        if ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then 
+        if rising_edge(SysClk_ClkIn) then 
             TimestampSysClk1_EvtReg <= Timestamper_Evt;
             TimestampSysClk2_EvtReg <= TimestampSysClk1_EvtReg;
             TimestampSysClk3_EvtReg <= TimestampSysClk2_EvtReg;
@@ -409,7 +409,7 @@ begin
             PulseWidth_DatReg <= (others=>'1');
             PulseStarted_ValReg <= (others => '0');
             PeriodIsOk_ValReg <= '0';
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             PulseStarted_ValReg(1) <= PulseStarted_ValReg(0);
             -- single pulse
             Timestamp_ValReg <= '0';
@@ -567,7 +567,7 @@ begin
             OffsetAdjustment_ValOldReg <= '0';
             OffsetAdjustmentInvalid_ValReg <= '0';
             WaitTimer_CntReg <= 0;
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             OffsetAdjustment_ValOldReg <= OffsetAdjustment_ValReg;
             OffsetAdjustment_ValReg <= '0';
             OffsetAdjustmentInvalid_ValReg <= '0';
@@ -751,7 +751,7 @@ begin
             Normalizer2_DatReg <= (others => '0');
             Normalizer2_Result_DatReg <= (others => '0');
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             DriftAdjustment_ValOldReg <= DriftAdjustment_ValReg;
             DriftAdjustmentInvalid_ValReg <= '0';
             DriftAdjustment_ValReg <= '0'; -- active for 1 clk cycle
@@ -1011,7 +1011,7 @@ begin
             OffsetFactorI_DatReg <= OffsetFactorI_Con;
             DriftFactorP_DatReg <= DriftFactorP_Con;
             DriftFactorI_DatReg <= DriftFactorI_Con;
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             if (Servo_ValIn = '1') then
                 OffsetFactorP_DatReg <= resize(unsigned(ServoOffsetFactorP_DatIn), FactorSize_Con);
                 OffsetFactorI_DatReg <= resize(unsigned(ServoOffsetFactorI_DatIn), FactorSize_Con);
@@ -1035,7 +1035,7 @@ begin
             PI_OffsetIntegral_DatReg <= (others => '0');
             PI_OffsetIntegralSign_DatReg <= '0';
             PI_OffsetMul_DatReg <= (others => '0');
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             PI_OffsetAdjustment_ValReg <= '0'; -- triggered for 1 clock cycle
             
             if (Enable_Ena = '1') then 
@@ -1159,7 +1159,7 @@ begin
             PI_DriftIntegralSign_DatReg <= '0';
             PI_DriftMul_DatReg <= (others => '0');
 
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             PI_DriftAdjustment_ValReg <= '0';
             if (Enable_Ena = '1') then 
                 case (PI_DriftState_StaReg) is 
@@ -1303,7 +1303,7 @@ begin
             else
                 PpsSlavePolarity_DatReg(PpsSlavePolarity_PolarityBit_Con) <= '0';
             end if;
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             if ((AxiWriteAddrValid_ValIn = '1') and (AxiWriteAddrReady_RdyReg = '1')) then
                 AxiWriteAddrReady_RdyReg <= '0';
             end if;

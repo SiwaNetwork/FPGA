@@ -105,7 +105,7 @@ begin
 
             IrqIn_DatReg <= '0';
             LevelCouter <= 0;
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
         
             if (SinglePulseIrq_Gen = true) then
                 IrqIn_DatReg <= '0';

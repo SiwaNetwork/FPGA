@@ -585,7 +585,7 @@ begin
             CountAdjust_Sign_DatReg <= '0';
             CountAdjust_ValReg <= '0';
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             TimeAdjust_ValReg <= '0';
             
             -- offset and drift correction
@@ -878,7 +878,7 @@ begin
             ClockTime_ValReg <= '0';
             ClockIncrement_DatReg <= (others => '0');
 
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             ClockTime_ValReg <= '1';
 
             if (TimeAdjust_ValReg = '1') then -- hard set time
@@ -929,7 +929,7 @@ begin
             Holdover_CntReg <= 0;
             OffsetArray_DatReg <= (others => '0');
 
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             ClockTimeB0_DatReg <= ClockTime_Second_DatReg(0);
 
             -- count holdover, will be reset on every adjustment
@@ -1021,7 +1021,7 @@ begin
             Axi_Init_Proc(ClockStatusOffset_Reg_Con, ClockStatusOffset_DatReg);
             Axi_Init_Proc(ClockStatusDrift_Reg_Con, ClockStatusDrift_DatReg);
 
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             ClockSelect_DatReg(15 downto 0) <= ClockSelect_DatReg(15 downto 0) and ClockSelect_Reg_Con.Mask(15 downto 0); -- make sure it is in a defined range
 
             if ((AxiWriteAddrValid_ValIn = '1') and (AxiWriteAddrReady_RdyReg = '1')) then

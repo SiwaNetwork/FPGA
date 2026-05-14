@@ -266,7 +266,7 @@ begin
     -- Generate the signal based on the compensated delays of the shift register
     SysClkNxReg_Prc : process(SysClkNx_ClkIn) is
     begin
-        if ((SysClkNx_ClkIn'event) and (SysClkNx_ClkIn = '1')) then
+        if rising_edge(SysClkNx_ClkIn) then
             SignalShiftSysClk1_DatReg <= SignalShiftSysClk_DatReg;
             if (SignalShiftSysClk_DatReg /= SignalShiftSysClk1_DatReg) then
                 SignalShiftSysClkNx_DatReg <= SignalShiftSysClkNx_DatReg(((HighResFreqMultiply_Gen*2)-2) downto (HighResFreqMultiply_Gen-1)) & SignalShiftSysClk_DatReg; -- copy the high resolution clock periods
@@ -311,7 +311,7 @@ begin
             RepeatCount_DatReg <= (others => '0');         
             SignalShiftSysClk_DatReg <= (others => '0');
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             Error_EvtReg <= '0';
             
             ClockTime_TimeJump_DatReg <= ClockTime_TimeJump_DatIn;
@@ -532,7 +532,7 @@ begin
             Axi_Init_Proc(SigGenPeriodValueH_Reg_Con, SigGenPeriodValueH_DatReg);
             Axi_Init_Proc(SigGenRepeatCount_Reg_Con, SigGenRepeatCount_DatReg);
 
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             if ((AxiWriteAddrValid_ValIn = '1') and (AxiWriteAddrReady_RdyReg = '1')) then
                 AxiWriteAddrReady_RdyReg <= '0';
             end if;

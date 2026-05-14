@@ -454,7 +454,7 @@ begin
             RomAddress_AdrReg <= (others => '0');
             RomReadState_StaReg <= ReadWait_St;
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             -- just a pulse
             AxiReadDone_ValReg <= '0';
             
@@ -551,7 +551,7 @@ begin
     -- Separate the process to infer a block ram implementation of the Core List memory
     Rom_Prc : process(SysClk_ClkIn) is
     begin
-        if ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        if rising_edge(SysClk_ClkIn) then
             RomRead_DatReg <= RomData_Rom(to_integer(unsigned(RomAddress_AdrReg)));
         end if;    
     end process Rom_Prc;

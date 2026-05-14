@@ -205,7 +205,7 @@ begin
             MsiVectorNum_DatReg <= (others => '0');
             
             IrqNumber <= 0;
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             if (MsiIrqEnable_EnIn = '1') then
             
                 IrqIn_DatReg <= IrqIn_Dat;

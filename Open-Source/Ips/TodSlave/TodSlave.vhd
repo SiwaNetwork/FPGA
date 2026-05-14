@@ -652,7 +652,7 @@ begin
         if (SysRstN_RstIn = '0') then
             RxUart_ShiftReg <= (others => '0');
             RxUart_DatReg <= '0';
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then 
+        elsif rising_edge(SysClk_ClkIn) then 
             RxUart_ShiftReg(1) <= RxUart_ShiftReg(0);
             RxUart_ShiftReg(0) <= RxUart_DatIn;
             if (UartPolarity_Dat = true) then -- use the input value or its inversion depending on the polarity configuration 
@@ -674,7 +674,7 @@ begin
             ClksPerUartBitCounter_CntReg <= 0;
             BitsPerMsgDataCounter_CntReg <= 0;
             UartError_DatReg <= '0';
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then 
+        elsif rising_edge(SysClk_ClkIn) then 
             RxUart_DatOldReg <= RxUart_DatReg;
             MsgDataValid_ValReg <= '0';
             UartError_DatReg <= '0';
@@ -814,7 +814,7 @@ begin
             ClockTime_Nanosecond_DatReg <= (others=>'0');
             ClockTime_Nanosecond_OldDatReg <= (others=>'0');
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             UbxParseError_DatReg <= '0';
             UbxChecksumError_DatReg <= '0';
             ClockTime_Nanosecond_DatReg <= ClockTime_Nanosecond_DatIn;
@@ -1605,7 +1605,7 @@ begin
             TsipPosition_TimeoutCounter_CntReg <= 0;
             TsipSatellite_TimeoutCounter_CntReg <= 0;
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             MillisecondFlag_EvtReg <= '0';
             UbxNavSat_Timeout_EvtReg <= '0';
             UbxHwMon_Timeout_EvtReg <= '0';
@@ -1761,7 +1761,7 @@ begin
 
             ToD_DatReg <= ToD_Type_Reset;
             ToDValid_ValReg <= '0';
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             ClockTime_Second_DatReg <= ClockTime_Second_DatIn;
             TimeAdjustment_Second_DatReg <= (others => '0');
             TimeAdjustment_Nanosecond_DatReg <= (others => '0'); -- jump exactly at a new second
@@ -1885,7 +1885,7 @@ begin
                 when CalcTai_St => 
                     -- finally add the second field and the utc offset and depending which second we received an extra second
                     if (ReceiveCurrentTime_Gen = true) then 
-                        GnssTime_Second_DatReg <= std_logic_vector(resize((unsigned(GnssTime_Second_DatReg)  + unsigned(UtcOffsetInfo_DatReg.CurrentTaiGnssOffset) + unsigned(ToD_DatReg.Second) + 1), SecondWidth_Con)); 
+                        GnssTime_Second_DatReg <= std_logic_vector(resize((unsigned(GnssTime_Second_DatReg)  + unsigned(UtcOffsetInfo_DatReg.CurrentTaiGnssOffset) + unsigned(ToD_DatReg.Second)), SecondWidth_Con)); 
                     else -- then next second is provided in advance
                         GnssTime_Second_DatReg <= std_logic_vector(resize((unsigned(GnssTime_Second_DatReg)  + unsigned(UtcOffsetInfo_DatReg.CurrentTaiGnssOffset) + unsigned(ToD_DatReg.Second)), SecondWidth_Con)); 
                     end if;
@@ -1950,7 +1950,7 @@ begin
             AntennaFixValid_ValOldReg <= '0';
             UtcOffsetInfoValid_ValOldReg <= '0';
             RxToDValid_ValOldReg <= '0';
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             AntennaInfoValid_ValOldReg <= AntennaInfoValid_ValReg;
             SatInfoValid_ValOldReg <= SatInfoValid_ValReg;
             AntennaFixValid_ValOldReg <= AntennaFixValid_ValReg;

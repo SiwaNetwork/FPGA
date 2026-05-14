@@ -203,7 +203,7 @@ begin
     -- Metastability registers of the input signal
     Syc_Prc : process(SysClk_ClkIn) is
     begin
-        if ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        if rising_edge(SysClk_ClkIn) then
             FrequencySysClk1_EvtReg <= Frequency_EvtIn;
             FrequencySysClk2_EvtReg <= FrequencySysClk1_EvtReg;
             FrequencySysClk3_EvtReg <= FrequencySysClk2_EvtReg;
@@ -232,7 +232,7 @@ begin
             FrequencyPeriod_DatReg <= (others => '0');
             Frequency_ValReg <= '0';
 
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             ClockTime_Second_DatReg <= ClockTime_Second_DatIn;
             ClockTime_Nanosecond_DatReg <= ClockTime_Nanosecond_DatIn;
             ClockTime_TimeJump_DatReg <= ClockTime_TimeJump_DatIn;
@@ -321,7 +321,7 @@ begin
             FrequencyExtend_DatReg <= (others => '0');
             CalcFrequencyDone_ValReg <= '0';
 
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             Frequency_ValOldReg <= Frequency_ValReg;
             CalcFrequencyDone_ValReg <= '0';
             

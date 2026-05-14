@@ -174,7 +174,7 @@ begin
             Axi_Init_Proc(FpgaVersion_Reg_Con, FpgaVersion_DatReg);
             FpgaVersion_DatReg <= FpgaVersion_Dat;
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then            
+        elsif rising_edge(SysClk_ClkIn) then            
             if ((AxiWriteAddrValid_ValIn = '1') and (AxiWriteAddrReady_RdyReg = '1')) then
                 AxiWriteAddrReady_RdyReg <= '0';
             end if;

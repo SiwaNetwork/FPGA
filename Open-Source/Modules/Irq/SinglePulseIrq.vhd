@@ -95,7 +95,7 @@ begin
         if (SysRstN_RstIn = '0') then
             IrqIn_DatReg <= '0';
             IrqIn_DatOutReg <= '0';
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             IrqIn_DatReg <= IrqIn_DatIn;
             IrqIn_DatOutReg <= '0';
      

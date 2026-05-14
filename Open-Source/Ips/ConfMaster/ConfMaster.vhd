@@ -388,7 +388,7 @@ begin
             
             ConfigDone_ValOut <= '0';
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             ConfigDone_ValOut <= '0';
             if ((AxiWriteAddrValid_ValReg = '1') and (AxiWriteAddrReady_RdyIn = '1')) then
                 AxiWriteAddrValid_ValReg <= '0';
@@ -535,7 +535,7 @@ begin
     -- Separate the process to infer a block ram implementation of the Core List memory
     Rom_Prc : process(SysClk_ClkIn) is
     begin
-        if ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        if rising_edge(SysClk_ClkIn) then
             RomRead_DatReg <= RomData_Rom(to_integer(unsigned(RomAddress_AdrReg)));
         end if;    
     end process Rom_Prc;

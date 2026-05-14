@@ -230,7 +230,7 @@ begin
     -- Mark an input event at the shift register of the high resolution clock domain
     SysClkNxReg_Prc : process(SysClkNx_ClkIn) is
     begin
-        if ((SysClkNx_ClkIn'event) and (SysClkNx_ClkIn = '1')) then 
+        if rising_edge(SysClkNx_ClkIn) then 
             TimestampSysClkNx1_EvtReg <= SignalTimestamper_Evt;
             TimestampSysClkNx2_EvtReg <= TimestampSysClkNx1_EvtReg;
             TimestampSysClkNx_EvtShiftReg <= TimestampSysClkNx_EvtShiftReg((HighResFreqMultiply_Gen*2-2) downto 0) & TimestampSysClkNx2_EvtReg;
@@ -240,7 +240,7 @@ begin
     -- Copy the event shift register of the high resolution clock domain to the system clock domain
     SysClkReg_Prc : process(SysClk_ClkIn) is
     begin
-        if ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then 
+        if rising_edge(SysClk_ClkIn) then 
             TimestampSysClk1_EvtReg <= SignalTimestamper_Evt;
             TimestampSysClk2_EvtReg <= TimestampSysClk1_EvtReg;
             TimestampSysClk3_EvtReg <= TimestampSysClk2_EvtReg;
@@ -264,7 +264,7 @@ begin
             ClockTime_Second_DatReg <= (others => '0');
             ClockTime_Nanosecond_DatReg <= (others => '0');
             ClockTime_ValReg <= '0';
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             -- single pulse
             Timestamp_ValReg <= '0';
             -- calculate the delay of the high resolution timestamping which consists of 
@@ -362,7 +362,7 @@ begin
             Axi_Init_Proc(TimestamperData_Reg_Con, TimestamperData_DatReg); -- unused
             Axi_Init_Proc(TimestamperDataWidth_Reg_Con, TimestamperDataWidth_DatReg); -- unused
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then            
+        elsif rising_edge(SysClk_ClkIn) then            
             if ((AxiWriteAddrValid_ValIn = '1') and (AxiWriteAddrReady_RdyReg = '1')) then
                 AxiWriteAddrReady_RdyReg <= '0';
             end if;

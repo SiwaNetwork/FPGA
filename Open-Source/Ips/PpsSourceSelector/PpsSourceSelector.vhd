@@ -160,7 +160,7 @@ begin
             GnssPpsPulse_CntReg <= 0;
             GnssPpsPeriod_CntReg <= 0;
 
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             SmaPps_EvtReg <= SmaPps_EvtIn;
             SmaPps_EvtFF <= SmaPps_EvtReg;
             MacPps_EvtReg <= MacPps_EvtIn;
@@ -281,7 +281,7 @@ begin
             PpsSlaveSourceSelect_DatReg <= (others => '0');
             MacSourceSelect_DatReg <= (others => '0');
 
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             case (PpsSourceSelect_DatIn) is
                 -- Auto select
                 when "00" =>

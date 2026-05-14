@@ -212,7 +212,7 @@ begin
    -- Pulse generation on the clock domain of the high frequency clock
     SysClkNxReg_Prc : process(SysClkNx_ClkIn) is
     begin
-        if ((SysClkNx_ClkIn'event) and (SysClkNx_ClkIn = '1')) then
+        if rising_edge(SysClkNx_ClkIn) then
             PpsShiftSysClk1_DatReg <= PpsShiftSysClk_DatReg;
             if (PpsShiftSysClk_DatReg /= PpsShiftSysClk1_DatReg) then
                 PpsShiftSysClkNx_DatReg <= PpsShiftSysClkNx_DatReg(((HighResFreqMultiply_Gen*2)-2) downto (HighResFreqMultiply_Gen-1)) & PpsShiftSysClk_DatReg; -- copy the high resolution clock periods
@@ -246,7 +246,7 @@ begin
             
             PulseWidthCounter_CntReg <= 0;
             
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             ClockTime_TimeJump_DatReg <= ClockTime_TimeJump_DatIn;
             ClockTime_ValReg <= ClockTime_ValIn;       
             if (CableDelay_Gen = false) then 
@@ -350,7 +350,7 @@ begin
             
             PpsGenPulseWidth_DatReg(9 downto 0) <= std_logic_vector(to_unsigned(OutputPulseWidthMillsecond_Con, 10)); -- overwrite with constant
            
-        elsif ((SysClk_ClkIn'event) and (SysClk_ClkIn = '1')) then
+        elsif rising_edge(SysClk_ClkIn) then
             if ((AxiWriteAddrValid_ValIn = '1') and (AxiWriteAddrReady_RdyReg = '1')) then
                 AxiWriteAddrReady_RdyReg <= '0';
             end if;
